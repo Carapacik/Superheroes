@@ -1,30 +1,15 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:superheroes/main.dart';
+import 'lesson_1/test_lesson_1_task_1.dart';
+import 'lesson_1/test_lesson_1_task_2.dart';
+import 'lesson_1/test_lesson_1_task_3.dart';
+import 'lesson_1/test_lesson_1_task_4.dart';
+import 'lesson_1/test_lesson_1_task_5.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+  group("l05h01", () => runTestLesson1Task1());
+  group("l05h02", () => runTestLesson1Task2());
+  group("l05h03", () => runTestLesson1Task3());
+  group("l05h04", () => runTestLesson1Task4());
+  group("l05h05", () => runTestLesson1Task5());
 }

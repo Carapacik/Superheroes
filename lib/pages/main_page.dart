@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
+import 'package:superheroes/resources/superheroes_images.dart';
+import 'package:superheroes/widgets/action_button.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
@@ -42,17 +44,11 @@ class MainPageContent extends StatelessWidget {
         MainPageStateWidget(),
         Align(
           alignment: Alignment.bottomCenter,
-          child: GestureDetector(
+          child: ActionButton(
             onTap: () => bloc.nextState(),
-            child: Text(
-              "Next state".toUpperCase(),
-              style: TextStyle(
-                fontSize: 20,
-                color: SuperheroesColors.white,
-              ),
-            ),
+            text: "Next state",
           ),
-        )
+        ),
       ],
     );
   }
@@ -72,8 +68,68 @@ class MainPageStateWidget extends StatelessWidget {
         switch (state) {
           case MainPageState.loading:
             return LoadingIndicator();
-          case MainPageState.noFavorites:
           case MainPageState.minSymbols:
+            return Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 110),
+                child: Text(
+                  "Enter at least 3 symbols",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: SuperheroesColors.white),
+                ),
+              ),
+            );
+          case MainPageState.noFavorites:
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        width: 108,
+                        height: 108,
+                        decoration: BoxDecoration(
+                          color: SuperheroesColors.blue,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 9),
+                        child: Image.asset(
+                          SuperheroesImages.ironman,
+                          width: 108,
+                          height: 119,
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    "No favorites yet",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 32,
+                      color: SuperheroesColors.white,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    "SEARCH AND ADD",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: SuperheroesColors.white,
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  ActionButton(text: "Search", onTap: () {})
+                ],
+              ),
+            );
           case MainPageState.nothingFound:
           case MainPageState.loadingError:
           case MainPageState.searchResults:
