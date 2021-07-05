@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
 import 'package:superheroes/widgets/action_button.dart';
+import 'package:superheroes/widgets/superhero_card.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
@@ -130,10 +132,47 @@ class MainPageStateWidget extends StatelessWidget {
                 ],
               ),
             );
+          case MainPageState.favorites:
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 90),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Your favorites",
+                    style: TextStyle(
+                      color: SuperheroesColors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SuperheroCard(
+                    name: "Batman",
+                    realName: "Bruce Wayne",
+                    imageUrl:
+                        "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
+                  ),
+                ),
+                SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SuperheroCard(
+                    name: "Ironman",
+                    realName: "Tony Stark",
+                    imageUrl:
+                        "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
+                  ),
+                ),
+              ],
+            );
           case MainPageState.nothingFound:
           case MainPageState.loadingError:
           case MainPageState.searchResults:
-          case MainPageState.favorites:
           default:
             return Center(
               child: Text(
