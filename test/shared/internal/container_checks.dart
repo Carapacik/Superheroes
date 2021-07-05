@@ -3,6 +3,26 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'matchers.dart';
 
+void checkContainerColor({
+  required final Container container,
+  required final Color color,
+  final Color? secondColor,
+}) {
+  final String widgetName = "Container";
+  expect(
+    container.color,
+    isNotNull,
+    reason: "$widgetName should have not null color property",
+  );
+  expect(
+    container.color,
+    secondColor != null ? isOneOrAnother(color, secondColor) : color,
+    reason: "$widgetName should have color ${secondColor != null ? "either "
+        "$color or $secondColor" : color}",
+  );
+}
+
+
 void checkContainerDecorationColor({
   required final Container container,
   required final Color color,
@@ -200,153 +220,6 @@ void checkContainerAlignment({
     reason: "$widgetName should have alignment $alignment",
   );
 }
-
-// void checkContainerProperties({
-//   required final Container container,
-//   final WidthAndHeight? widthAndHeight,
-//   final WidthAndHeight? secondWidthAndHeight,
-//   final EdgeInsetsCheck? padding,
-//   final EdgeInsetsCheck? margin,
-//   final EdgeInsetsCheck? paddingOrMargin,
-//   final BoxDecoration? decoration,
-//   final BoxDecoration? secondDecoration,
-//   final Alignment? alignment,
-//   final Color? color,
-//   final Type? childType,
-// }) {
-//   if (paddingOrMargin != null) {
-//     assert(padding == null && margin == null);
-//   }
-//   if (secondWidthAndHeight != null) {
-//     assert(widthAndHeight != null);
-//   }
-//   if (secondDecoration != null) {
-//     assert(decoration != null);
-//   }
-//   final String widgetName = "Container";
-//   if (margin != null) {
-//     _checkEdgeInsetParam(
-//       widgetName: widgetName,
-//       param: container.margin,
-//       paramName: "margin",
-//       edgeInsetsCheck: margin,
-//     );
-//   }
-//   if (padding != null) {
-//     _checkEdgeInsetParam(
-//       widgetName: widgetName,
-//       param: container.padding,
-//       paramName: "padding",
-//       edgeInsetsCheck: padding,
-//     );
-//   }
-//   if (paddingOrMargin != null) {
-//     _checkEdgeInsetParam(
-//       widgetName: widgetName,
-//       param: container.padding ?? container.margin,
-//       paramName: "padding",
-//       edgeInsetsCheck: paddingOrMargin,
-//     );
-//   }
-//   if (widthAndHeight != null) {
-//     final widthAndHeightConstraints = BoxConstraints.tightFor(
-//       width: widthAndHeight.width,
-//       height: widthAndHeight.height,
-//     );
-//     expect(
-//       container.constraints,
-//       secondWidthAndHeight != null
-//           ? isOneOrAnother(
-//               widthAndHeightConstraints,
-//               BoxConstraints.tightFor(
-//                 width: secondWidthAndHeight.width,
-//                 height: secondWidthAndHeight.height,
-//               ),
-//             )
-//           : widthAndHeightConstraints,
-//       reason: "$widgetName should have ${secondWidthAndHeight != null ? "either "
-//           "width ${widthAndHeight.width} and height ${widthAndHeight.height} or "
-//           "width ${secondWidthAndHeight.width} and height "
-//           "${secondWidthAndHeight.height}" : "width "
-//           "${widthAndHeight.width} and height ${widthAndHeight.height}"}",
-//     );
-//   }
-//   if (alignment != null) {
-//     expect(
-//       container.alignment,
-//       isNotNull,
-//       reason: "$widgetName should have not null alignment property",
-//     );
-//     expect(
-//       container.alignment,
-//       alignment,
-//       reason: "$widgetName should have alignment $alignment",
-//     );
-//   }
-//   if (decoration != null) {
-//     expect(
-//       container.decoration,
-//       isNotNull,
-//       reason: "$widgetName should have not null decoration property",
-//     );
-//     expect(
-//       container.decoration,
-//       isInstanceOf<BoxDecoration>(),
-//       reason: "$widgetName should have decoration of BoxDecoration type",
-//     );
-//     if (decoration.border != null) {
-//       if (decoration.border is Border) {
-//         expect(
-//           (container.decoration as BoxDecoration).border,
-//           isInstanceOf<Border>(),
-//           reason: "$widgetName border should be a Border type",
-//         );
-//         expect(
-//           (container.decoration as BoxDecoration).border as Border,
-//           isOneOrAnother(
-//             Border.all(color: Colors.black87, width: 2),
-//             Border.all(color: const Color(0xDE000000), width: 2),
-//           ),
-//           reason: "Container should have border with width equals 2 and 81 percent black color",
-//         );
-//       } else {
-//         throw UnimplementedError("Not implemented other cases");
-//       }
-//     }
-//   }
-//
-//   // expect(
-//   //   textWidget.style,
-//   //   isNotNull,
-//   //   reason: "$widgetName should have not null TextStyle",
-//   // );
-//   // final TextStyle notNullTextStyle = textWidget.style!;
-//   // if (fontSize != null) {
-//   //   _checkTextStyleProperty<double>(
-//   //     widgetName: widgetName,
-//   //     property: notNullTextStyle.fontSize,
-//   //     propertyName: "fontSize",
-//   //     rightValue: fontSize,
-//   //   );
-//   // }
-//   // if (textColor != null) {
-//   //   _checkTextStyleProperty<Color>(
-//   //     widgetName: widgetName,
-//   //     property: notNullTextStyle.color,
-//   //     propertyName: "color",
-//   //     rightValue: textColor,
-//   //   );
-//   // }
-//   //
-//   // if (fontWeight != null) {
-//   //   _checkTextStyleProperty<FontWeight>(
-//   //     widgetName: widgetName,
-//   //     property: notNullTextStyle.fontWeight,
-//   //     propertyName: "fontWeight",
-//   //     rightValue: fontWeight,
-//   //   );
-//   // }
-// }
 
 void checkEdgeInsetParam({
   required final String widgetName,

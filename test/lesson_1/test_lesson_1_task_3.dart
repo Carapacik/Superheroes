@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/main.dart';
 
 import '../shared/test_helpers.dart';
+import 'shared.dart';
 
 
 void runTestLesson1Task3() {
@@ -10,12 +12,7 @@ void runTestLesson1Task3() {
     await tester.pumpWidget(MyApp());
     await tester.pumpAndSettle();
 
-    // we are at MainPageState.noFavorites now
-
-    await tester.tap(find.text("NEXT STATE"));
-    await tester.pumpAndSettle();
-
-    // we are at MainPageState.minSymbols now
+    await reachNeededState(tester, MainPageState.minSymbols);
 
     final alignFinder = findTypeByTextOnlyInParentType(Align, "Enter at least 3 symbols", Stack);
     expect(

@@ -5,6 +5,7 @@ import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
 import 'package:superheroes/widgets/action_button.dart';
+import 'package:superheroes/widgets/info_with_button.dart';
 import 'package:superheroes/widgets/superhero_card.dart';
 
 class MainPage extends StatefulWidget {
@@ -85,52 +86,34 @@ class MainPageStateWidget extends StatelessWidget {
               ),
             );
           case MainPageState.noFavorites:
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        width: 108,
-                        height: 108,
-                        decoration: BoxDecoration(
-                          color: SuperheroesColors.blue,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 9),
-                        child: Image.asset(
-                          SuperheroesImages.ironman,
-                          width: 108,
-                          height: 119,
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "No favorites yet",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 32,
-                      color: SuperheroesColors.white,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "SEARCH AND ADD",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                      color: SuperheroesColors.white,
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  ActionButton(text: "Search", onTap: () {})
-                ],
-              ),
+            return InfoWithButton(
+              title: "No favorites yet",
+              subtitle: "Search and add",
+              buttonText: "Search",
+              assetImage: SuperheroesImages.ironman,
+              imageHeight: 119,
+              imageWidth: 108,
+              imageTopPadding: 9,
+            );
+          case MainPageState.nothingFound:
+            return InfoWithButton(
+              title: "Nothing found",
+              subtitle: "Search for something else",
+              buttonText: "Search",
+              assetImage: SuperheroesImages.hulk,
+              imageHeight: 112,
+              imageWidth: 84,
+              imageTopPadding: 16,
+            );
+          case MainPageState.loadingError:
+            return InfoWithButton(
+              title: "Error happened",
+              subtitle: "Please, try again",
+              buttonText: "Retry",
+              assetImage: SuperheroesImages.superman,
+              imageHeight: 106,
+              imageWidth: 126,
+              imageTopPadding: 22,
             );
           case MainPageState.favorites:
             return Column(
@@ -156,6 +139,7 @@ class MainPageStateWidget extends StatelessWidget {
                     realName: "Bruce Wayne",
                     imageUrl:
                         "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
+                    onTap: () {},
                   ),
                 ),
                 SizedBox(height: 8),
@@ -166,13 +150,51 @@ class MainPageStateWidget extends StatelessWidget {
                     realName: "Tony Stark",
                     imageUrl:
                         "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
+                    onTap: () {},
                   ),
                 ),
               ],
             );
-          case MainPageState.nothingFound:
-          case MainPageState.loadingError:
           case MainPageState.searchResults:
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 90),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Search results",
+                    style: TextStyle(
+                      color: SuperheroesColors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SuperheroCard(
+                    name: "Venom",
+                    realName: "Eddie Brock",
+                    imageUrl:
+                        "https://www.superherodb.com/pictures2/portraits/10/100/22.jpg",
+                    onTap: () {},
+                  ),
+                ),
+                SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SuperheroCard(
+                    name: "Ironman",
+                    realName: "Tony Stark",
+                    imageUrl:
+                        "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
+                    onTap: () {},
+                  ),
+                ),
+              ],
+            );
           default:
             return Center(
               child: Text(
