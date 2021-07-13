@@ -44,10 +44,10 @@ class MainPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MainBloc bloc = Provider.of<MainBloc>(context);
+    final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
     return Stack(
       children: [
-        MainPageStateWidget(),
+        const MainPageStateWidget(),
         Align(
           alignment: Alignment.bottomCenter,
           child: ActionButton(
@@ -55,15 +55,77 @@ class MainPageContent extends StatelessWidget {
             text: "Next state",
           ),
         ),
+        const Padding(
+          padding: EdgeInsets.only(left: 15, right: 16, top: 12),
+          child: SearchWidget(),
+        ),
       ],
     );
   }
 }
 
-class MainPageStateWidget extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
+  const SearchWidget({Key? key}) : super(key: key);
+
+  @override
+  _SearchWidgetState createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    final MainBloc bloc = Provider.of<MainBloc>(context);
+    final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
+    return TextField(
+      controller: controller,
+      onChanged: (text) => bloc.updateText(text),
+      style: const TextStyle(
+        color: SuperheroesColors.white,
+        fontSize: 20,
+      ),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: SuperheroesColors.indigo75,
+        isDense: true,
+        prefixIcon: const Icon(
+          Icons.search,
+          color: Colors.white54,
+          size: 24,
+        ),
+        suffix: GestureDetector(
+          onTap: () => controller.clear(),
+          child: const Icon(
+            Icons.clear,
+            color: Colors.white,
+          ),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: Colors.white24,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MainPageStateWidget extends StatelessWidget {
+  const MainPageStateWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
     return StreamBuilder<MainPageState>(
       stream: bloc.observeMainPageState(),
       builder: (context, snapshot) {
@@ -311,8 +373,7 @@ class LoadingIndicator extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(top: 110),
         child: CircularProgressIndicator(
-          //color: SuperheroesColors.blue,
-          valueColor: AlwaysStoppedAnimation<Color>(SuperheroesColors.blue),
+          color: SuperheroesColors.blue,
           strokeWidth: 4,
         ),
       ),
