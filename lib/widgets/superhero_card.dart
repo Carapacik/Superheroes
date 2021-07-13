@@ -21,7 +21,7 @@ class SuperheroCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 70,
-        color: SuperheroesColors.heroBackground,
+        color: SuperheroesColors.indigo,
         child: Row(
           children: [
             Image.network(
@@ -30,7 +30,7 @@ class SuperheroCard extends StatelessWidget {
               width: 70,
               fit: BoxFit.cover,
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +38,7 @@ class SuperheroCard extends StatelessWidget {
                 children: [
                   Text(
                     name.toUpperCase(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: SuperheroesColors.white,
@@ -46,7 +46,7 @@ class SuperheroCard extends StatelessWidget {
                   ),
                   Text(
                     realName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: SuperheroesColors.white,
                     ),

@@ -10,7 +10,7 @@ import 'package:superheroes/widgets/info_with_button.dart';
 import 'package:superheroes/widgets/superhero_card.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key? key}) : super(key: key);
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -40,6 +40,8 @@ class _MainPageState extends State<MainPage> {
 }
 
 class MainPageContent extends StatelessWidget {
+  const MainPageContent({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final MainBloc bloc = Provider.of<MainBloc>(context);
@@ -66,175 +68,233 @@ class MainPageStateWidget extends StatelessWidget {
       stream: bloc.observeMainPageState(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
-          return SizedBox();
+          return const SizedBox();
         }
         final MainPageState state = snapshot.data!;
         switch (state) {
           case MainPageState.loading:
             return LoadingIndicator();
           case MainPageState.minSymbols:
-            return Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 110),
-                child: Text(
-                  "Enter at least 3 symbols",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: SuperheroesColors.white),
-                ),
-              ),
-            );
+            return MinSymbolsWidget();
           case MainPageState.noFavorites:
-            return InfoWithButton(
-              title: "No favorites yet",
-              subtitle: "Search and add",
-              buttonText: "Search",
-              assetImage: SuperheroesImages.ironman,
-              imageHeight: 119,
-              imageWidth: 108,
-              imageTopPadding: 9,
-            );
+            return NoFavoritesWidget();
           case MainPageState.nothingFound:
-            return InfoWithButton(
-              title: "Nothing found",
-              subtitle: "Search for something else",
-              buttonText: "Search",
-              assetImage: SuperheroesImages.hulk,
-              imageHeight: 112,
-              imageWidth: 84,
-              imageTopPadding: 16,
-            );
+            return NothingFoundWidget();
           case MainPageState.loadingError:
-            return InfoWithButton(
-              title: "Error happened",
-              subtitle: "Please, try again",
-              buttonText: "Retry",
-              assetImage: SuperheroesImages.superman,
-              imageHeight: 106,
-              imageWidth: 126,
-              imageTopPadding: 22,
-            );
+            return LoadingErrorWidget();
           case MainPageState.favorites:
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 90),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    "Your favorites",
-                    style: TextStyle(
-                      color: SuperheroesColors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SuperheroCard(
-                    name: "Batman",
-                    realName: "Bruce Wayne",
-                    imageUrl:
-                        "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              SuperheroPage(heroName: "Batman"),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SuperheroCard(
-                    name: "Ironman",
-                    realName: "Tony Stark",
-                    imageUrl:
-                        "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              SuperheroPage(heroName: "Ironman"),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
+            return FavoritesWidget();
           case MainPageState.searchResults:
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 90),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    "Search results",
-                    style: TextStyle(
-                      color: SuperheroesColors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SuperheroCard(
-                    name: "Batman",
-                    realName: "Bruce Wayne",
-                    imageUrl:
-                        "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              SuperheroPage(heroName: "Batman"),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SuperheroCard(
-                    name: "Venom",
-                    realName: "Eddie Brock",
-                    imageUrl:
-                        "https://www.superherodb.com/pictures2/portraits/10/100/22.jpg",
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              SuperheroPage(heroName: "Venom"),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
+            return SearchResultWidget();
           default:
             return Center(
               child: Text(
                 snapshot.data!.toString(),
-                style: TextStyle(
+                style: const TextStyle(
                   color: SuperheroesColors.white,
                 ),
               ),
             );
         }
       },
+    );
+  }
+}
+
+class NoFavoritesWidget extends StatelessWidget {
+  const NoFavoritesWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: InfoWithButton(
+        title: "No favorites yet",
+        subtitle: "Search and add",
+        buttonText: "Search",
+        assetImage: SuperheroesImages.ironman,
+        imageHeight: 119,
+        imageWidth: 108,
+        imageTopPadding: 9,
+      ),
+    );
+  }
+}
+
+class NothingFoundWidget extends StatelessWidget {
+  const NothingFoundWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: InfoWithButton(
+        title: "Nothing found",
+        subtitle: "Search for something else",
+        buttonText: "Search",
+        assetImage: SuperheroesImages.hulk,
+        imageHeight: 112,
+        imageWidth: 84,
+        imageTopPadding: 16,
+      ),
+    );
+  }
+}
+
+class LoadingErrorWidget extends StatelessWidget {
+  const LoadingErrorWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: InfoWithButton(
+        title: "Error happened",
+        subtitle: "Please, try again",
+        buttonText: "Retry",
+        assetImage: SuperheroesImages.superman,
+        imageHeight: 106,
+        imageWidth: 126,
+        imageTopPadding: 22,
+      ),
+    );
+  }
+}
+
+class FavoritesWidget extends StatelessWidget {
+  const FavoritesWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 90),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            "Your favorites",
+            style: TextStyle(
+              color: SuperheroesColors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SuperheroCard(
+            name: "Batman",
+            realName: "Bruce Wayne",
+            imageUrl:
+                "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SuperheroPage(name: "Batman"),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SuperheroCard(
+            name: "Ironman",
+            realName: "Tony Stark",
+            imageUrl:
+                "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SuperheroPage(name: "Ironman"),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SearchResultWidget extends StatelessWidget {
+  const SearchResultWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 90),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            "Search results",
+            style: TextStyle(
+              color: SuperheroesColors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SuperheroCard(
+            name: "Batman",
+            realName: "Bruce Wayne",
+            imageUrl:
+                "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SuperheroPage(name: "Batman"),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SuperheroCard(
+            name: "Venom",
+            realName: "Eddie Brock",
+            imageUrl:
+                "https://www.superherodb.com/pictures2/portraits/10/100/22.jpg",
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SuperheroPage(name: "Venom"),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MinSymbolsWidget extends StatelessWidget {
+  const MinSymbolsWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: EdgeInsets.only(top: 110),
+        child: Text(
+          "Enter at least 3 symbols",
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: SuperheroesColors.white),
+        ),
+      ),
     );
   }
 }
@@ -246,7 +306,7 @@ class LoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return const Align(
       alignment: Alignment.topCenter,
       child: Padding(
         padding: EdgeInsets.only(top: 110),
