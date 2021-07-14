@@ -54,7 +54,7 @@ class InfoWithButton extends StatelessWidget {
           style: const TextStyle(
             fontWeight: FontWeight.w800,
             fontSize: 32,
-            color: SuperheroesColors.white,
+            color: Colors.white,
           ),
         ),
         const SizedBox(height: 20),
@@ -63,7 +63,7 @@ class InfoWithButton extends StatelessWidget {
           style: const TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 16,
-            color: SuperheroesColors.white,
+            color: Colors.white,
           ),
         ),
         const SizedBox(height: 30),

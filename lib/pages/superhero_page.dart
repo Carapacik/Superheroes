@@ -22,7 +22,7 @@ class SuperheroPage extends StatelessWidget {
                 name,
                 style: const TextStyle(
                   fontSize: 20,
-                  color: SuperheroesColors.white,
+                  color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),
               ),
