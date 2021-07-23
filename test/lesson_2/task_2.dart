@@ -19,21 +19,24 @@ void runTestLesson2Task2() {
       final batmanSuperheroInfo = SuperheroInfo(
         name: "Batman",
         realName: "Bruce Wayne",
-        imageUrl: "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
+        imageUrl:
+            "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
       );
       await testOneSuperhero(tester, batmanSuperheroInfo);
 
       final ironmanSuperheroInfo = SuperheroInfo(
         name: "Ironman",
         realName: "Tony Stark",
-        imageUrl: "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
+        imageUrl:
+            "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
       );
       await testOneSuperhero(tester, ironmanSuperheroInfo);
     });
   });
 }
 
-Future<void> testOneSuperhero(final WidgetTester tester, final SuperheroInfo superheroInfo ) async {
+Future<void> testOneSuperhero(
+    final WidgetTester tester, final SuperheroInfo superheroInfo) async {
   await tester.pumpWidget(MaterialApp(
     home: SuperheroCard(
       superheroInfo: superheroInfo,

@@ -7,6 +7,7 @@ import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/pages/superhero_page.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
+import 'package:superheroes/widgets/action_button.dart';
 import 'package:superheroes/widgets/info_with_button.dart';
 import 'package:superheroes/widgets/superhero_card.dart';
 
@@ -24,7 +25,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Provider.value(
       value: bloc,
-      child: Scaffold(
+      child: const Scaffold(
         backgroundColor: SuperheroesColors.background,
         body: SafeArea(
           child: MainPageContent(),
@@ -46,7 +47,7 @@ class MainPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
+      children: const [
         MainPageStateWidget(),
         Padding(
           padding: EdgeInsets.only(left: 15, right: 16, top: 12),
@@ -66,13 +67,22 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
   final TextEditingController controller = TextEditingController();
+  bool haveSearchedText = false;
 
   @override
   void initState() {
     super.initState();
     SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
       final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
-      controller.addListener(() => bloc.updateText(controller.text));
+      controller.addListener(() {
+        bloc.updateText(controller.text);
+        final haveText = controller.text.isNotEmpty;
+        if (haveSearchedText != haveText) {
+          setState(() {
+            haveSearchedText = haveText;
+          });
+        }
+      });
     });
   }
 
@@ -108,9 +118,9 @@ class _SearchWidgetState extends State<SearchWidget> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(
-            color: Colors.white24,
-          ),
+          borderSide: haveSearchedText
+              ? const BorderSide(color: Colors.white, width: 2)
+              : const BorderSide(color: Colors.white24),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -143,15 +153,37 @@ class MainPageStateWidget extends StatelessWidget {
           case MainPageState.minSymbols:
             return const MinSymbolsWidget();
           case MainPageState.noFavorites:
-            return const NoFavoritesWidget();
+            return Stack(
+              children: [
+                const NoFavoritesWidget(),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ActionButton(
+                    text: "Remove",
+                    onTap: bloc.removeFavorite,
+                  ),
+                ),
+              ],
+            );
           case MainPageState.nothingFound:
             return const NothingFoundWidget();
           case MainPageState.loadingError:
             return const LoadingErrorWidget();
           case MainPageState.favorites:
-            return SuperheroesList(
-              title: "Your favorites",
-              stream: bloc.observeFavoriteSuperheroes(),
+            return Stack(
+              children: [
+                SuperheroesList(
+                  title: "Your favorites",
+                  stream: bloc.observeFavoriteSuperheroes(),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ActionButton(
+                    text: "Remove",
+                    onTap: bloc.removeFavorite,
+                  ),
+                ),
+              ],
             );
           case MainPageState.searchResults:
             return SuperheroesList(
@@ -328,7 +360,6 @@ class LoadingIndicator extends StatelessWidget {
         padding: EdgeInsets.only(top: 110),
         child: CircularProgressIndicator(
           color: SuperheroesColors.blue,
-          strokeWidth: 4,
         ),
       ),
     );

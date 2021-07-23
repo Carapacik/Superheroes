@@ -16,9 +16,10 @@ void runTestLesson2Task1() {
   testWidgets('module1', (WidgetTester tester) async {
     await mockNetworkImagesFor(() async {
       await tester.runAsync(() async {
-        final subject = BehaviorSubject<List<SuperheroInfo>>.seeded(SuperheroInfo.mocked);
-        await tester.pumpWidget(
-            MaterialApp(home: SuperheroesList(title: "Your favorites", stream: subject)));
+        final subject =
+            BehaviorSubject<List<SuperheroInfo>>.seeded(SuperheroInfo.mocked);
+        await tester.pumpWidget(MaterialApp(
+            home: SuperheroesList(title: "Your favorites", stream: subject)));
 
         await tester.pump(Duration(milliseconds: 1));
 

@@ -17,43 +17,66 @@ void runTestLesson2Task4() {
       final batman = SuperheroInfo(
         name: "Batman",
         realName: "Bruce Wayne",
-        imageUrl: "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
+        imageUrl:
+            "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
       );
       final ironman = SuperheroInfo(
         name: "Ironman",
         realName: "Tony Stark",
-        imageUrl: "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
+        imageUrl:
+            "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
+      );
+      final venom = SuperheroInfo(
+        name: "Venom",
+        realName: "Eddie Brock",
+        imageUrl:
+            'https://www.superherodb.com/pictures2/portraits/10/100/22.jpg',
       );
       final MainBloc bloc = MainBloc();
       expect(
-        bloc.search("batm"),
-        completion(equals([batman])),
-        reason: "Searching 'batm' should return only info about Batman",
+        await bloc.search("batm"),
+        [batman],
+        reason: "Searching 'batm' should return info about Batman",
       );
       expect(
-        bloc.search("BATM"),
-        completion(equals([batman])),
-        reason: "Searching 'BATM' should return only info about Batman",
+        await bloc.search("BATM"),
+        [batman],
+        reason: "Searching 'BATM' should return info about Batman",
       );
       expect(
-        bloc.search("Batm"),
-        completion(equals([batman])),
-        reason: "Searching 'Batm' should return only info about Batman",
+        await bloc.search("Batm"),
+        [batman],
+        reason: "Searching 'Batm' should return info about Batman",
       );
       expect(
-        bloc.search("man"),
-        completion(equals([batman, ironman])),
+        await bloc.search("man"),
+        [batman, ironman],
         reason: "Searching 'man' should return info about Batman and Ironman",
       );
       expect(
-        bloc.search("MAN"),
-        completion(equals([batman, ironman])),
+        await bloc.search("MAN"),
+        [batman, ironman],
         reason: "Searching 'MAN' should return info about Batman and Ironman",
       );
       expect(
-        bloc.search("Tony"),
-        completion(equals([])),
+        await bloc.search("maN"),
+        [batman, ironman],
+        reason: "Searching 'maN' should return info about Batman and Ironman",
+      );
+      expect(
+        await bloc.search("veNOm"),
+        [venom],
+        reason: "Searching 'veNOm' should return info about Venom",
+      );
+      expect(
+        await bloc.search("Tony"),
+        [],
         reason: "Searching 'Tony' should return nothing",
+      );
+      expect(
+        await bloc.search("Eddie"),
+        [],
+        reason: "Searching 'Eddie' should return nothing",
       );
     });
   });

@@ -22,7 +22,6 @@ void checkContainerColor({
   );
 }
 
-
 void checkContainerDecorationColor({
   required final Container container,
   required final Color color,
@@ -47,11 +46,11 @@ void checkContainerDecorationColor({
   expect(
     (container.decoration as BoxDecoration).color,
     secondColor != null ? isOneOrAnother(color, secondColor) : color,
-    reason: "$widgetName decoration should have color ${secondColor != null ? "either "
-        "$color or $secondColor" : color}",
+    reason:
+        "$widgetName decoration should have color ${secondColor != null ? "either "
+            "$color or $secondColor" : color}",
   );
 }
-
 
 void checkContainerDecorationShape({
   required final Container container,
@@ -300,11 +299,14 @@ void _checkTextStyleProperty<T>({
   expect(
     property,
     isNotNull,
-    reason: "The style of $widgetName should have not null $propertyName property",
+    reason:
+        "The style of $widgetName should have not null $propertyName property",
   );
   expect(
     property,
-    secondRightValue != null ? isOneOrAnother(rightValue, secondRightValue) : rightValue,
+    secondRightValue != null
+        ? isOneOrAnother(rightValue, secondRightValue)
+        : rightValue,
     reason: "The style of $widgetName should have $propertyName "
         "${secondRightValue != null ? "either $rightValue or $secondRightValue" : rightValue}",
   );
@@ -334,7 +336,8 @@ class EdgeInsetsCheck {
           right == other.right;
 
   @override
-  int get hashCode => top.hashCode ^ bottom.hashCode ^ left.hashCode ^ right.hashCode;
+  int get hashCode =>
+      top.hashCode ^ bottom.hashCode ^ left.hashCode ^ right.hashCode;
 }
 
 class WidthAndHeight {
