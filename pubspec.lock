@@ -472,7 +472,7 @@ packages:
       name: process
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.1"
+    version: "4.2.2"
   provider:
     dependency: "direct main"
     description:

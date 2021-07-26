@@ -1,4 +1,5 @@
 export 'internal/container_checks.dart';
+export 'internal/exceptions.dart';
 export 'internal/extensions.dart';
 export 'internal/finders.dart';
 export 'internal/image_checks.dart';

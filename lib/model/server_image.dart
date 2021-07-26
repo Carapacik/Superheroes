@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'server_image.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.kebab)
+@JsonSerializable(fieldRename: FieldRename.kebab, explicitToJson: true)
 class ServerImage {
   final String url;
 
