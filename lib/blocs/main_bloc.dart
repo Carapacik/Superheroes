@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
+import 'package:superheroes/model/superhero.dart';
 
 class MainBloc {
   static const minSymbols = 3;
@@ -14,7 +18,9 @@ class MainBloc {
   StreamSubscription? textSubscription;
   StreamSubscription? searchSubscription;
 
-  MainBloc() {
+  http.Client? client;
+
+  MainBloc({this.client}) {
     stateSubject.add(MainPageState.noFavorites);
 
     textSubscription =
@@ -62,12 +68,31 @@ class MainBloc {
       searchedSuperheroSubject;
 
   Future<List<SuperheroInfo>> search(final String text) async {
-    await Future.delayed(const Duration(seconds: 1));
+    final token = dotenv.env["SUPERHERO_TOKEN"];
+    final response = await (client ??= http.Client())
+        .get(Uri.parse("https://superheroapi.com/api/$token/search/$text"));
+    final decoded = json.decode(response.body);
+    if (decoded['response'] == 'success') {
+      final List<dynamic> results = decoded['results'] as List<dynamic>;
+      final List<Superhero> superheroes = results
+          .map((rawSuperhero) =>
+              Superhero.fromJson(rawSuperhero as Map<String, dynamic>))
+          .toList();
+      final List<SuperheroInfo> found = superheroes.map((superheroes) {
+        return SuperheroInfo(
+          name: superheroes.name,
+          realName: superheroes.biography.fullName,
+          imageUrl: superheroes.image.url,
+        );
+      }).toList();
+      return found;
+    } else if (decoded['response'] == 'error') {
+      if (decoded['error'] == 'character with given name not found') {
+        return [];
+      }
+    }
 
-    return SuperheroInfo.mocked
-        .where((superheroInfo) =>
-            superheroInfo.name.toLowerCase().contains(text.toLowerCase()))
-        .toList();
+    throw Exception("Unknown error happened");
   }
 
   Stream<MainPageState> observeMainPageState() => stateSubject;
@@ -102,6 +127,7 @@ class MainBloc {
     currentTextSubject.close();
 
     textSubscription?.cancel();
+    client?.close();
   }
 }
 
