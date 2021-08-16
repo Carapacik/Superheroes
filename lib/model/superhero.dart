@@ -13,10 +13,15 @@ class Superhero {
   final ServerImage image;
   final Powerstats powerstats;
 
-  Superhero(this.id, this.name, this.biography, this.image, this.powerstats);
+  Superhero({
+    required this.id,
+    required this.name,
+    required this.biography,
+    required this.image,
+    required this.powerstats,
+  });
 
-  factory Superhero.fromJson(Map<String, dynamic> json) =>
-      _$SuperheroFromJson(json);
+  factory Superhero.fromJson(Map<String, dynamic> json) => _$SuperheroFromJson(json);
 
   Map<String, dynamic> toJson() => _$SuperheroToJson(this);
 }

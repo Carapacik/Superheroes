@@ -39,16 +39,14 @@ void runTestLesson3Task4() {
     expect(
       powerstatsMock1,
       powerstats1JsonReversed,
-      reason:
-          "Powerstats should convert itself via toJson() method to Map<String, dynamic> correctly",
+      reason: "Powerstats should convert itself via toJson() method to Map<String, dynamic> correctly",
     );
     final Powerstats powerstats2 = Powerstats.fromJson(powerstatsMock2);
     final Map<String, dynamic> powerstats2JsonReversed = powerstats2.toJson();
     expect(
       powerstatsMock2,
       powerstats2JsonReversed,
-      reason:
-          "Powerstats should convert itself via toJson() method to Map<String, dynamic> correctly",
+      reason: "Powerstats should convert itself via toJson() method to Map<String, dynamic> correctly",
     );
 
     final Biography biography1 = Biography.fromJson(biographyMock1);
@@ -56,8 +54,7 @@ void runTestLesson3Task4() {
     expect(
       biographyMock1,
       biography1JsonReversed,
-      reason:
-          "Biography should convert itself via toJson() method to Map<String, dynamic> correctly",
+      reason: "Biography should convert itself via toJson() method to Map<String, dynamic> correctly",
     );
 
     final Superhero superhero = Superhero.fromJson(batmaResponse);
@@ -66,53 +63,25 @@ void runTestLesson3Task4() {
     expect(
       superheroJsonReversed,
       batmaResponseReversed,
-      reason:
-          "Superhero should convert itself via toJson() method to Map<String, dynamic> correctly",
+      reason: "Superhero should convert itself via toJson() method to Map<String, dynamic> correctly",
     );
   });
 }
 
-final powerstatsMock1 = {
-  "intelligence": "100",
-  "strength": "26",
-  "speed": "27",
-  "durability": "50",
-  "power": "47",
-  "combat": "100"
-};
+final powerstatsMock1 = {"intelligence": "100", "strength": "26", "speed": "27", "durability": "50", "power": "47", "combat": "100"};
 
-final powerstatsMock2 = {
-  "intelligence": "null",
-  "strength": "null",
-  "speed": "null",
-  "durability": "null",
-  "power": "null",
-  "combat": "null"
-};
+final powerstatsMock2 = {"intelligence": "null", "strength": "null", "speed": "null", "durability": "null", "power": "null", "combat": "null"};
 
 final biographyMock1 = {"full-name": "Terry McGinnis", "alignment": "good"};
 
 final batmaResponse = {
   "id": "69",
   "name": "Batman",
-  "powerstats": {
-    "intelligence": "81",
-    "strength": "40",
-    "speed": "29",
-    "durability": "55",
-    "power": "63",
-    "combat": "90"
-  },
+  "powerstats": {"intelligence": "81", "strength": "40", "speed": "29", "durability": "55", "power": "63", "combat": "90"},
   "biography": {
     "full-name": "Terry McGinnis",
     "alter-egos": "No alter egos found.",
-    "aliases": [
-      "Batman II",
-      "The Tomorrow Knight",
-      "The second Dark Knight",
-      "The Dark Knight of Tomorrow",
-      "Batman Beyond"
-    ],
+    "aliases": ["Batman II", "The Tomorrow Knight", "The second Dark Knight", "The Dark Knight of Tomorrow", "Batman Beyond"],
     "place-of-birth": "Gotham City, 25th Century",
     "first-appearance": "Batman Beyond #1",
     "publisher": "DC Comics",
@@ -129,32 +98,17 @@ final batmaResponse = {
   "work": {"occupation": "-", "base": "21st Century Gotham City"},
   "connections": {
     "group-affiliation": "Batman Family, Justice League Unlimited",
-    "relatives":
-        "Bruce Wayne (biological father), Warren McGinnis (father, deceased), Mary McGinnis (mother), Matt McGinnis (brother)"
+    "relatives": "Bruce Wayne (biological father), Warren McGinnis (father, deceased), Mary McGinnis (mother), Matt McGinnis (brother)"
   },
-  "image": {
-    "url": "https://www.superherodb.com/pictures2/portraits/10/100/10441.jpg"
-  }
+  "image": {"url": "https://www.superherodb.com/pictures2/portraits/10/100/10441.jpg"}
 };
 
 final batmaResponseReversed = {
   "id": "69",
   "name": "Batman",
-  "powerstats": {
-    "intelligence": "81",
-    "strength": "40",
-    "speed": "29",
-    "durability": "55",
-    "power": "63",
-    "combat": "90"
-  },
+  "powerstats": {"intelligence": "81", "strength": "40", "speed": "29", "durability": "55", "power": "63", "combat": "90"},
   "biography": {"full-name": "Terry McGinnis", "alignment": "good"},
-  "image": {
-    "url": "https://www.superherodb.com/pictures2/portraits/10/100/10441.jpg"
-  }
+  "image": {"url": "https://www.superherodb.com/pictures2/portraits/10/100/10441.jpg"}
 };
 
-final errorResponse = {
-  "response": "error",
-  "error": "character with given name not found"
-};
+final errorResponse = {"response": "error", "error": "character with given name not found"};

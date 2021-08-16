@@ -34,7 +34,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Provider.value(
       value: bloc,
-      child: const Scaffold(
+      child: Scaffold(
         backgroundColor: SuperheroesColors.background,
         body: SafeArea(
           child: MainPageContent(),
@@ -51,16 +51,19 @@ class _MainPageState extends State<MainPage> {
 }
 
 class MainPageContent extends StatelessWidget {
-  const MainPageContent({Key? key}) : super(key: key);
+  MainPageContent({Key? key}) : super(key: key);
+  final FocusNode searchFiledFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: const [
-        MainPageStateWidget(),
+      children: [
+        MainPageStateWidget(
+          searchFiledFocusNode: searchFiledFocusNode,
+        ),
         Padding(
-          padding: EdgeInsets.only(left: 15, right: 16, top: 12),
-          child: SearchWidget(),
+          padding: const EdgeInsets.only(left: 15, right: 16, top: 12),
+          child: SearchWidget(searchFiledFocusNode: searchFiledFocusNode),
         ),
       ],
     );
@@ -68,7 +71,11 @@ class MainPageContent extends StatelessWidget {
 }
 
 class SearchWidget extends StatefulWidget {
-  const SearchWidget({Key? key}) : super(key: key);
+  const SearchWidget({
+    Key? key,
+    required this.searchFiledFocusNode,
+  }) : super(key: key);
+  final FocusNode searchFiledFocusNode;
 
   @override
   _SearchWidgetState createState() => _SearchWidgetState();
@@ -98,6 +105,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      focusNode: widget.searchFiledFocusNode,
       controller: controller,
       cursorColor: Colors.white,
       textInputAction: TextInputAction.search,
@@ -127,9 +135,7 @@ class _SearchWidgetState extends State<SearchWidget> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: haveSearchedText
-              ? const BorderSide(color: Colors.white, width: 2)
-              : const BorderSide(color: Colors.white24),
+          borderSide: haveSearchedText ? const BorderSide(color: Colors.white, width: 2) : const BorderSide(color: Colors.white24),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -144,7 +150,11 @@ class _SearchWidgetState extends State<SearchWidget> {
 }
 
 class MainPageStateWidget extends StatelessWidget {
-  const MainPageStateWidget({Key? key}) : super(key: key);
+  const MainPageStateWidget({
+    Key? key,
+    required this.searchFiledFocusNode,
+  }) : super(key: key);
+  final FocusNode searchFiledFocusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +174,9 @@ class MainPageStateWidget extends StatelessWidget {
           case MainPageState.noFavorites:
             return Stack(
               children: [
-                const NoFavoritesWidget(),
+                NoFavoritesWidget(
+                  searchFiledFocusNode: searchFiledFocusNode,
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: ActionButton(
@@ -175,7 +187,9 @@ class MainPageStateWidget extends StatelessWidget {
               ],
             );
           case MainPageState.nothingFound:
-            return const NothingFoundWidget();
+            return NothingFoundWidget(
+              searchFiledFocusNode: searchFiledFocusNode,
+            );
           case MainPageState.loadingError:
             return const LoadingErrorWidget();
           case MainPageState.favorites:
@@ -215,11 +229,15 @@ class MainPageStateWidget extends StatelessWidget {
 }
 
 class NoFavoritesWidget extends StatelessWidget {
-  const NoFavoritesWidget({Key? key}) : super(key: key);
+  const NoFavoritesWidget({
+    Key? key,
+    required this.searchFiledFocusNode,
+  }) : super(key: key);
+  final FocusNode searchFiledFocusNode;
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: InfoWithButton(
         title: "No favorites yet",
         subtitle: "Search and add",
@@ -228,17 +246,23 @@ class NoFavoritesWidget extends StatelessWidget {
         imageHeight: 119,
         imageWidth: 108,
         imageTopPadding: 9,
+        onTap: () => searchFiledFocusNode.requestFocus(),
       ),
     );
   }
 }
 
 class NothingFoundWidget extends StatelessWidget {
-  const NothingFoundWidget({Key? key}) : super(key: key);
+  const NothingFoundWidget({
+    Key? key,
+    required this.searchFiledFocusNode,
+  }) : super(key: key);
+
+  final FocusNode searchFiledFocusNode;
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: InfoWithButton(
         title: "Nothing found",
         subtitle: "Search for something else",
@@ -247,6 +271,7 @@ class NothingFoundWidget extends StatelessWidget {
         imageHeight: 112,
         imageWidth: 84,
         imageTopPadding: 16,
+        onTap: () => searchFiledFocusNode.requestFocus(),
       ),
     );
   }
@@ -257,7 +282,8 @@ class LoadingErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    final bloc = Provider.of<MainBloc>(context, listen: false);
+    return Center(
       child: InfoWithButton(
         title: "Error happened",
         subtitle: "Please, try again",
@@ -266,6 +292,7 @@ class LoadingErrorWidget extends StatelessWidget {
         imageHeight: 106,
         imageWidth: 126,
         imageTopPadding: 22,
+        onTap: bloc.retry,
       ),
     );
   }
@@ -348,8 +375,7 @@ class MinSymbolsWidget extends StatelessWidget {
         padding: EdgeInsets.only(top: 110),
         child: Text(
           "Enter at least 3 symbols",
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
         ),
       ),
     );

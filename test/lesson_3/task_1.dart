@@ -19,11 +19,9 @@ void runTestLesson3Task1() {
       final batmanSuperheroInfo = SuperheroInfo(
         name: "Batman",
         realName: "Bruce Wayne",
-        imageUrl:
-            "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
+        imageUrl: "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
       );
-      final card =
-          SuperheroCard(superheroInfo: batmanSuperheroInfo, onTap: () {});
+      final card = SuperheroCard(superheroInfo: batmanSuperheroInfo, onTap: () {});
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -31,14 +29,12 @@ void runTestLesson3Task1() {
         ),
       );
 
-      final placeholderContainerFinder = findTypeByChildTypeOnlyInParentType(
-          Container, CircularProgressIndicator, Row);
+      final placeholderContainerFinder = findTypeByChildTypeOnlyInParentType(Container, CircularProgressIndicator, Row);
 
       expect(
         placeholderContainerFinder,
         findsOneWidget,
-        reason:
-            "There should be a Container widget that wraps CachedNetworkImage",
+        reason: "There should be a Container widget that wraps CachedNetworkImage",
       );
 
       final Container container = tester.widget(placeholderContainerFinder);

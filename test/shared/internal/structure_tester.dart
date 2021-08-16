@@ -31,8 +31,7 @@ void testStructure(final Map<String, FileSystemEntityType> structure) {
   var allPaths = directory.listSync(recursive: true);
 
   var validatePath = (String path, FileSystemEntityType desiredType) {
-    final FileSystemEntity? entity =
-        allPaths.firstWhereOrNull((element) => element.path == path);
+    final FileSystemEntity? entity = allPaths.firstWhereOrNull((element) => element.path == path);
     if (entity == null) {
       throw ElementNotExistsError(path);
     }

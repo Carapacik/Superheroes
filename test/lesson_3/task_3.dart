@@ -26,11 +26,9 @@ void runTestLesson3Task3() {
       final batmanSuperheroInfo = SuperheroInfo(
         name: "Batman",
         realName: "Bruce Wayne",
-        imageUrl:
-            "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
+        imageUrl: "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
       );
-      final card =
-          SuperheroCard(superheroInfo: batmanSuperheroInfo, onTap: () {});
+      final card = SuperheroCard(superheroInfo: batmanSuperheroInfo, onTap: () {});
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -45,8 +43,7 @@ void runTestLesson3Task3() {
         reason: "Expected to find one CachedNetworkImage inside SuperheroCard",
       );
 
-      final cachedNetworkImage =
-          tester.widget<CachedNetworkImage>(cachedNetworkImageFinder);
+      final cachedNetworkImage = tester.widget<CachedNetworkImage>(cachedNetworkImageFinder);
 
       expect(
         cachedNetworkImage.errorWidget,
@@ -74,8 +71,7 @@ void runTestLesson3Task3() {
       expect(
         find.byType(Center),
         findsOneWidget,
-        reason:
-            "Expected to find Center if error happened during image loading",
+        reason: "Expected to find Center if error happened during image loading",
       );
 
       final Center center = tester.widget(centerFinder);

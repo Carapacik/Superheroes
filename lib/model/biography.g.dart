@@ -8,8 +8,8 @@ part of 'biography.dart';
 
 Biography _$BiographyFromJson(Map<String, dynamic> json) {
   return Biography(
-    json['full-name'] as String,
-    json['alignment'] as String,
+    fullName: json['full-name'] as String,
+    alignment: json['alignment'] as String,
   );
 }
 

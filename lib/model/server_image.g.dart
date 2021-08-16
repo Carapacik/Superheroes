@@ -12,7 +12,6 @@ ServerImage _$ServerImageFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$ServerImageToJson(ServerImage instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ServerImageToJson(ServerImage instance) => <String, dynamic>{
       'url': instance.url,
     };

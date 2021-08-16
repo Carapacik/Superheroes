@@ -29,8 +29,7 @@ class SuperheroPage extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: ActionButton(
-                  text: "Back", onTap: () => Navigator.of(context).pop()),
+              child: ActionButton(text: "Back", onTap: () => Navigator.of(context).pop()),
             )
           ],
         ),

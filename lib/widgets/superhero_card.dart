@@ -36,15 +36,13 @@ class SuperheroCard extends StatelessWidget {
                 height: 70,
                 width: 70,
                 fit: BoxFit.cover,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(
-                  child: SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      value: downloadProgress.progress,
-                      color: SuperheroesColors.primaryBlue,
-                    ),
+                progressIndicatorBuilder: (context, url, progress) => Container(
+                  alignment: Alignment.center,
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    color: SuperheroesColors.blue,
+                    value: progress.progress,
                   ),
                 ),
                 errorWidget: (context, url, error) => Center(
@@ -52,6 +50,7 @@ class SuperheroCard extends StatelessWidget {
                     SuperheroesImages.unknown,
                     width: 20,
                     height: 62,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -76,7 +75,7 @@ class SuperheroCard extends StatelessWidget {
                       fontSize: 14,
                       color: Colors.white,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
