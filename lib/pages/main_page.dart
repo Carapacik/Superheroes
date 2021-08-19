@@ -347,7 +347,7 @@ class SuperheroesList extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => SuperheroPage(name: item.name),
+                        builder: (context) => SuperheroPage(id: item.id),
                       ),
                     );
                   },

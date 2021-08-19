@@ -80,6 +80,7 @@ class MainBloc {
       final List<Superhero> superheroes = results.map((rawSuperhero) => Superhero.fromJson(rawSuperhero as Map<String, dynamic>)).toList();
       final List<SuperheroInfo> found = superheroes.map((superheroes) {
         return SuperheroInfo(
+          id: superheroes.id,
           name: superheroes.name,
           realName: superheroes.biography.fullName,
           imageUrl: superheroes.image.url,
@@ -131,11 +132,13 @@ class MainBloc {
 enum MainPageState { noFavorites, minSymbols, loading, nothingFound, loadingError, searchResults, favorites }
 
 class SuperheroInfo {
+  final String id;
   final String name;
   final String realName;
   final String imageUrl;
 
   const SuperheroInfo({
+    required this.id,
     required this.name,
     required this.realName,
     required this.imageUrl,
@@ -143,29 +146,36 @@ class SuperheroInfo {
 
   @override
   String toString() {
-    return 'SuperheroInfo{name: $name, realName: $realName, imageUrl: $imageUrl}';
+    return 'SuperheroInfo{id: $id, name: $name, realName: $realName, imageUrl: $imageUrl}';
   }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SuperheroInfo && runtimeType == other.runtimeType && name == other.name && realName == other.realName && imageUrl == other.imageUrl;
+      other is SuperheroInfo &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          realName == other.realName &&
+          imageUrl == other.imageUrl;
 
   @override
-  int get hashCode => name.hashCode ^ realName.hashCode ^ imageUrl.hashCode;
-
+  int get hashCode => id.hashCode ^ name.hashCode ^ realName.hashCode ^ imageUrl.hashCode;
   static const mocked = [
     SuperheroInfo(
+      id: "70",
       name: "Batman",
       realName: "Bruce Wayne",
       imageUrl: "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
     ),
     SuperheroInfo(
+      id: "732",
       name: "Ironman",
       realName: "Tony Stark",
       imageUrl: "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
     ),
     SuperheroInfo(
+      id: "687",
       name: "Venom",
       realName: "Eddie Brock",
       imageUrl: "https://www.superherodb.com/pictures2/portraits/10/100/22.jpg",

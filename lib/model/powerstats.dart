@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'powerstats.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class Powerstats {
   final String intelligence;
   final String strength;
@@ -19,6 +19,8 @@ class Powerstats {
     required this.power,
     required this.combat,
   });
+
+  bool isNotNull() => intelligence != "null" && strength != "null" && speed != "null" && durability != "null" && power != "null" && combat != "null";
 
   factory Powerstats.fromJson(Map<String, dynamic> json) => _$PowerstatsFromJson(json);
 
