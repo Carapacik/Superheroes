@@ -8,7 +8,6 @@ import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/pages/superhero_page.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
-import 'package:superheroes/widgets/action_button.dart';
 import 'package:superheroes/widgets/info_with_button.dart';
 import 'package:superheroes/widgets/superhero_card.dart';
 
@@ -172,41 +171,15 @@ class MainPageStateWidget extends StatelessWidget {
           case MainPageState.minSymbols:
             return const MinSymbolsWidget();
           case MainPageState.noFavorites:
-            return Stack(
-              children: [
-                NoFavoritesWidget(
-                  searchFiledFocusNode: searchFiledFocusNode,
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: ActionButton(
-                    text: "Remove",
-                    onTap: bloc.removeFavorite,
-                  ),
-                ),
-              ],
-            );
+            return NoFavoritesWidget(searchFiledFocusNode: searchFiledFocusNode);
           case MainPageState.nothingFound:
-            return NothingFoundWidget(
-              searchFiledFocusNode: searchFiledFocusNode,
-            );
+            return NothingFoundWidget(searchFiledFocusNode: searchFiledFocusNode);
           case MainPageState.loadingError:
             return const LoadingErrorWidget();
           case MainPageState.favorites:
-            return Stack(
-              children: [
-                SuperheroesList(
-                  title: "Your favorites",
-                  stream: bloc.observeFavoriteSuperheroes(),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: ActionButton(
-                    text: "Remove",
-                    onTap: bloc.removeFavorite,
-                  ),
-                ),
-              ],
+            return SuperheroesList(
+              title: "Your favorites",
+              stream: bloc.observeFavoriteSuperheroes(),
             );
           case MainPageState.searchResults:
             return SuperheroesList(
@@ -322,37 +295,10 @@ class SuperheroesList extends StatelessWidget {
           itemCount: superheroes.length + 1,
           itemBuilder: (BuildContext context, int index) {
             if (index == 0) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 90,
-                  bottom: 12,
-                ),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              );
+              return ListTitleWidget(title: title);
             } else {
               final SuperheroInfo item = superheroes[index - 1];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SuperheroCard(
-                  superheroInfo: item,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SuperheroPage(id: item.id),
-                      ),
-                    );
-                  },
-                ),
-              );
+              return ListTile(superhero: item);
             }
           },
           separatorBuilder: (BuildContext context, int index) {
@@ -360,6 +306,61 @@ class SuperheroesList extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class ListTile extends StatelessWidget {
+  const ListTile({
+    Key? key,
+    required this.superhero,
+  }) : super(key: key);
+
+  final SuperheroInfo superhero;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: SuperheroCard(
+        superheroInfo: superhero,
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SuperheroPage(id: superhero.id),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ListTitleWidget extends StatelessWidget {
+  const ListTitleWidget({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 90,
+        bottom: 12,
+      ),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 24,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
     );
   }
 }

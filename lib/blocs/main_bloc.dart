@@ -5,12 +5,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:superheroes/exception/api_exception.dart';
+import 'package:superheroes/favorite_superheroes_storage.dart';
 import 'package:superheroes/model/superhero.dart';
 
 class MainBloc {
   static const minSymbols = 3;
   final BehaviorSubject<MainPageState> stateSubject = BehaviorSubject();
-  final BehaviorSubject<List<SuperheroInfo>> favoritesSuperheroSubject = BehaviorSubject<List<SuperheroInfo>>.seeded(SuperheroInfo.mocked);
   final BehaviorSubject<List<SuperheroInfo>> searchedSuperheroSubject = BehaviorSubject<List<SuperheroInfo>>();
   final currentTextSubject = BehaviorSubject<String>.seeded("");
 
@@ -22,9 +22,9 @@ class MainBloc {
   MainBloc({this.client}) {
     stateSubject.add(MainPageState.noFavorites);
 
-    textSubscription = Rx.combineLatest2<String, List<SuperheroInfo>, MainPageStateInfo>(
+    textSubscription = Rx.combineLatest2<String, List<Superhero>, MainPageStateInfo>(
         currentTextSubject.distinct().debounceTime(const Duration(milliseconds: 500)),
-        favoritesSuperheroSubject,
+        FavoriteSuperheroesStorage.getInstance().observeFavoriteSuperheroes(),
         (searchText, haveFavorites) => MainPageStateInfo(searchText, haveFavorites.isNotEmpty)).listen((value) {
       searchSubscription?.cancel();
       if (value.searchText.isEmpty) {
@@ -61,7 +61,11 @@ class MainBloc {
     searchForSuperheroes(currentText);
   }
 
-  Stream<List<SuperheroInfo>> observeFavoriteSuperheroes() => favoritesSuperheroSubject;
+  Stream<List<SuperheroInfo>> observeFavoriteSuperheroes() {
+    return FavoriteSuperheroesStorage.getInstance()
+        .observeFavoriteSuperheroes()
+        .map((superheroes) => superheroes.map((superhero) => SuperheroInfo.fromSuperhero(superhero)).toList());
+  }
 
   Stream<List<SuperheroInfo>> observeSearchedSuperheroes() => searchedSuperheroSubject;
 
@@ -78,14 +82,7 @@ class MainBloc {
     if (decoded['response'] == 'success') {
       final List<dynamic> results = decoded['results'] as List<dynamic>;
       final List<Superhero> superheroes = results.map((rawSuperhero) => Superhero.fromJson(rawSuperhero as Map<String, dynamic>)).toList();
-      final List<SuperheroInfo> found = superheroes.map((superheroes) {
-        return SuperheroInfo(
-          id: superheroes.id,
-          name: superheroes.name,
-          realName: superheroes.biography.fullName,
-          imageUrl: superheroes.image.url,
-        );
-      }).toList();
+      final List<SuperheroInfo> found = superheroes.map((superhero) => SuperheroInfo.fromSuperhero(superhero)).toList();
       return found;
     } else if (decoded['response'] == 'error') {
       if (decoded['error'] == 'character with given name not found') {
@@ -99,15 +96,6 @@ class MainBloc {
 
   Stream<MainPageState> observeMainPageState() => stateSubject;
 
-  void removeFavorite() {
-    final List<SuperheroInfo> currentFavorites = favoritesSuperheroSubject.value;
-    if (currentFavorites.isEmpty) {
-      favoritesSuperheroSubject.add(SuperheroInfo.mocked);
-    } else {
-      favoritesSuperheroSubject.add(currentFavorites.sublist(0, currentFavorites.length - 1));
-    }
-  }
-
   void nextState() {
     final currentState = stateSubject.value;
     final nextState = MainPageState.values[(MainPageState.values.indexOf(currentState) + 1) % MainPageState.values.length];
@@ -120,11 +108,12 @@ class MainBloc {
 
   void dispose() {
     stateSubject.close();
-    favoritesSuperheroSubject.close();
     searchedSuperheroSubject.close();
     currentTextSubject.close();
 
     textSubscription?.cancel();
+    searchSubscription?.cancel();
+
     client?.close();
   }
 }
@@ -143,6 +132,15 @@ class SuperheroInfo {
     required this.realName,
     required this.imageUrl,
   });
+
+  factory SuperheroInfo.fromSuperhero(final Superhero superhero) {
+    return SuperheroInfo(
+      id: superhero.id,
+      name: superhero.name,
+      realName: superhero.biography.fullName,
+      imageUrl: superhero.image.url,
+    );
+  }
 
   @override
   String toString() {
