@@ -7,7 +7,7 @@ import 'package:superheroes/model/superhero.dart';
 class FavoriteSuperheroesStorage {
   static const _key = "favorite_superheroes";
 
-  final updater = PublishSubject<void>();
+  final updater = PublishSubject<Null>();
 
   static FavoriteSuperheroesStorage? _instance;
 

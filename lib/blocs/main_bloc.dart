@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:superheroes/exception/api_exception.dart';
 import 'package:superheroes/favorite_superheroes_storage.dart';
+import 'package:superheroes/model/alignment_info.dart';
 import 'package:superheroes/model/superhero.dart';
 
 class MainBloc {
@@ -16,12 +17,11 @@ class MainBloc {
 
   StreamSubscription? textSubscription;
   StreamSubscription? searchSubscription;
+  StreamSubscription? removeFromFavoriteSubscription;
 
   http.Client? client;
 
   MainBloc({this.client}) {
-    stateSubject.add(MainPageState.noFavorites);
-
     textSubscription = Rx.combineLatest2<String, List<Superhero>, MainPageStateInfo>(
         currentTextSubject.distinct().debounceTime(const Duration(milliseconds: 500)),
         FavoriteSuperheroesStorage.getInstance().observeFavoriteSuperheroes(),
@@ -54,6 +54,16 @@ class MainBloc {
       print(error);
       stateSubject.add(MainPageState.loadingError);
     });
+  }
+
+  void removeFromFavorites(final String id) {
+    removeFromFavoriteSubscription?.cancel();
+    removeFromFavoriteSubscription = FavoriteSuperheroesStorage.getInstance().removeFromFavorites(id).asStream().listen(
+      (event) {
+        print("Removed from favorites: $event");
+      },
+      onError: (error, stackTrace) => print("Error happened in addToFavorite: $error, $stackTrace"),
+    );
   }
 
   void retry() {
@@ -113,6 +123,7 @@ class MainBloc {
 
     textSubscription?.cancel();
     searchSubscription?.cancel();
+    removeFromFavoriteSubscription?.cancel();
 
     client?.close();
   }
@@ -125,12 +136,14 @@ class SuperheroInfo {
   final String name;
   final String realName;
   final String imageUrl;
+  final AlignmentInfo? alignmentInfo;
 
   const SuperheroInfo({
     required this.id,
     required this.name,
     required this.realName,
     required this.imageUrl,
+    this.alignmentInfo,
   });
 
   factory SuperheroInfo.fromSuperhero(final Superhero superhero) {
@@ -139,6 +152,7 @@ class SuperheroInfo {
       name: superhero.name,
       realName: superhero.biography.fullName,
       imageUrl: superhero.image.url,
+      alignmentInfo: superhero.biography.alignmentInfo,
     );
   }
 
