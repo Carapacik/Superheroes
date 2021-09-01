@@ -109,7 +109,7 @@ void runTestLesson4Task2() {
                     ),
                   ))
                 .build()),
-        surfaceSize: const Size(328, 238),
+        surfaceSize: const Size(328, 240),
       );
       await screenMatchesGolden(tester, 'superheroes_lesson_4_task_2', autoHeight: true);
       bloc.dispose();

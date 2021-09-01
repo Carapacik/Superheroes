@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:superheroes/blocs/superhero_bloc.dart';
+import 'package:superheroes/model/alignment_info.dart';
 import 'package:superheroes/model/biography.dart';
 import 'package:superheroes/model/powerstats.dart';
 import 'package:superheroes/model/superhero.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_icons.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
+import 'package:superheroes/widgets/superhero_card.dart';
 
 class SuperheroPage extends StatefulWidget {
   const SuperheroPage({
@@ -113,15 +115,17 @@ class SuperheroAppBar extends StatelessWidget {
           imageUrl: superhero.image.url,
           fit: BoxFit.cover,
           placeholder: (context, url) => Container(
-            color: SuperheroesColors.indigo,
             width: double.infinity,
-            height: 348,
+            height: 360,
+            color: SuperheroesColors.indigo,
           ),
-          errorWidget: (context, url, error) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 42),
-            child: Image.asset(
-              SuperheroesImages.unknownBig,
-              height: 264,
+          errorWidget: (context, url, error) => ColoredBox(
+            color: SuperheroesColors.indigo,
+            child: Center(
+              child: Image.asset(
+                SuperheroesImages.unknown,
+                height: 264,
+              ),
             ),
           ),
         ),
@@ -350,12 +354,66 @@ class BiographyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 350,
-      alignment: Alignment.center,
-      child: Text(
-        biography.toJson().toString(),
-        style: const TextStyle(color: Colors.white),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 16, right: 16, left: 16, bottom: 24),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), color: SuperheroesColors.indigo),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    "BIO",
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Full name".toUpperCase(),
+                  style: const TextStyle(color: SuperheroesColors.ultraGrey, fontWeight: FontWeight.w700, fontSize: 12),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  biography.fullName,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "Aliases".toUpperCase(),
+                  style: const TextStyle(color: SuperheroesColors.ultraGrey, fontWeight: FontWeight.w700, fontSize: 12),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  biography.aliases.join(","),
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "Place of birth".toUpperCase(),
+                  style: const TextStyle(color: SuperheroesColors.ultraGrey, fontWeight: FontWeight.w700, fontSize: 12),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  biography.placeOfBirth,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              height: 70,
+              width: 24,
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(borderRadius: BorderRadius.only(topRight: Radius.circular(16), bottomLeft: Radius.circular(16))),
+              child: AlignmentWidget(alignmentInfo: AlignmentInfo.fromAlignment(biography.alignment)!),
+            ),
+          )
+        ],
       ),
     );
   }

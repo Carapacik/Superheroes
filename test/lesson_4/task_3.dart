@@ -115,7 +115,7 @@ void runTestLesson4Task3() {
               ),
             ))
               .build()),
-      surfaceSize: const Size(328, 754),
+      surfaceSize: const Size(328, 756),
     );
     await screenMatchesGolden(tester, 'superheroes_lesson_4_task_3', autoHeight: true);
   });
