@@ -11,6 +11,7 @@ import 'package:superheroes/model/powerstats.dart';
 import 'package:superheroes/model/superhero.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_icons.dart';
+import 'package:superheroes/resources/superheroes_images.dart';
 
 class SuperheroPage extends StatefulWidget {
   const SuperheroPage({
@@ -39,7 +40,7 @@ class _SuperheroPageState extends State<SuperheroPage> {
   Widget build(BuildContext context) {
     return Provider.value(
       value: bloc,
-      child: Scaffold(
+      child: const Scaffold(
         backgroundColor: SuperheroesColors.background,
         body: SuperheroContentPage(),
       ),
@@ -100,7 +101,7 @@ class SuperheroAppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       expandedHeight: 348,
-      actions: [FavoriteButton()],
+      actions: const [FavoriteButton()],
       backgroundColor: SuperheroesColors.background,
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
@@ -111,6 +112,18 @@ class SuperheroAppBar extends StatelessWidget {
         background: CachedNetworkImage(
           imageUrl: superhero.image.url,
           fit: BoxFit.cover,
+          placeholder: (context, url) => Container(
+            color: SuperheroesColors.indigo,
+            width: double.infinity,
+            height: 348,
+          ),
+          errorWidget: (context, url, error) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 42),
+            child: Image.asset(
+              SuperheroesImages.unknownBig,
+              height: 264,
+            ),
+          ),
         ),
       ),
     );

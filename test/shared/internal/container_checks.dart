@@ -22,6 +22,7 @@ void checkContainerColor({
   );
 }
 
+
 void checkContainerDecorationColor({
   required final Container container,
   required final Color color,
@@ -50,6 +51,7 @@ void checkContainerDecorationColor({
         "$color or $secondColor" : color}",
   );
 }
+
 
 void checkContainerDecorationShape({
   required final Container container,
@@ -324,7 +326,12 @@ class EdgeInsetsCheck {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is EdgeInsetsCheck && runtimeType == other.runtimeType && top == other.top && bottom == other.bottom && left == other.left && right == other.right;
+      other is EdgeInsetsCheck &&
+          runtimeType == other.runtimeType &&
+          top == other.top &&
+          bottom == other.bottom &&
+          left == other.left &&
+          right == other.right;
 
   @override
   int get hashCode => top.hashCode ^ bottom.hashCode ^ left.hashCode ^ right.hashCode;
@@ -338,7 +345,11 @@ class WidthAndHeight {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is WidthAndHeight && runtimeType == other.runtimeType && width == other.width && height == other.height;
+      identical(this, other) ||
+      other is WidthAndHeight &&
+          runtimeType == other.runtimeType &&
+          width == other.width &&
+          height == other.height;
 
   @override
   int get hashCode => width.hashCode ^ height.hashCode;

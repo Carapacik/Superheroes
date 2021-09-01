@@ -7,3 +7,4 @@ export 'internal/matchers.dart';
 export 'internal/structure_tester.dart';
 export 'internal/text_checks.dart';
 export 'internal/text_field_checks.dart';
+export 'internal/streams.dart';
