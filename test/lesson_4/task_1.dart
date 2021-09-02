@@ -29,8 +29,7 @@ import 'task_1.mocks.dart';
 void runTestLesson4Task1() {
   setUp(() {
     final values = <String, dynamic>{};
-    const MethodChannel('plugins.flutter.io/shared_preferences')
-        .setMockMethodCallHandler((MethodCall methodCall) async {
+    const MethodChannel('plugins.flutter.io/shared_preferences').setMockMethodCallHandler((MethodCall methodCall) async {
       if (methodCall.method == 'getAll') {
         return values; // set initial values here if desired
       } else if (methodCall.method.startsWith("set")) {
@@ -70,8 +69,7 @@ void runTestLesson4Task1() {
         expect(
           find.byType(Dismissible),
           findsNothing,
-          reason:
-              "If you pass ableToSwipe: false into ListTile, you should not use Dismissible widget",
+          reason: "If you pass ableToSwipe: false into ListTile, you should not use Dismissible widget",
         );
 
         await tester.pumpWidget(

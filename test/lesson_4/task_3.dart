@@ -32,8 +32,7 @@ import 'task_3.mocks.dart';
 void runTestLesson4Task3() {
   setUp(() {
     final values = <String, dynamic>{};
-    const MethodChannel('plugins.flutter.io/shared_preferences')
-        .setMockMethodCallHandler((MethodCall methodCall) async {
+    const MethodChannel('plugins.flutter.io/shared_preferences').setMockMethodCallHandler((MethodCall methodCall) async {
       if (methodCall.method == 'getAll') {
         return values; // set initial values here if desired
       } else if (methodCall.method.startsWith("set")) {
@@ -52,14 +51,12 @@ void runTestLesson4Task3() {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList("favorite_superheroes", []);
 
-    final uriCreator = (superheroId) =>
-        Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
+    final uriCreator = (superheroId) => Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
     when(client.get(uriCreator(superhero1.id))).thenAnswer(
-          (_) async =>
-          http.Response(
-            json.encode(superheroResponse1.toJson()),
-            200,
-          ),
+      (_) async => http.Response(
+        json.encode(superheroResponse1.toJson()),
+        200,
+      ),
     );
     await tester.pumpWidget(
       MaterialApp(home: SuperheroPage(id: superhero1.id, client: client)),
@@ -85,8 +82,7 @@ void runTestLesson4Task3() {
       reason: "errorWidget property in CachedNetworkImage shouldn't be null",
     );
 
-    final widgetCreator = (Widget widgetCreator(BuildContext context)) =>
-        Material(
+    final widgetCreator = (Widget widgetCreator(BuildContext context)) => Material(
           child: Directionality(
             textDirection: TextDirection.ltr,
             child: Builder(builder: (context) {
@@ -102,18 +98,18 @@ void runTestLesson4Task3() {
     await tester.pumpWidgetBuilder(
       Center(
           child: (GoldenBuilder.column()
-            ..addScenario(
-              'placeholder',
-              widgetCreator(
+                ..addScenario(
+                  'placeholder',
+                  widgetCreator(
                     (context) => cachedNetworkImage.placeholder!(context, superhero1.image.url),
-              ),
-            )..addScenario(
-              'errorWidget',
-              widgetCreator(
-                    (context) =>
-                    cachedNetworkImage.errorWidget!(context, superhero1.image.url, null),
-              ),
-            ))
+                  ),
+                )
+                ..addScenario(
+                  'errorWidget',
+                  widgetCreator(
+                    (context) => cachedNetworkImage.errorWidget!(context, superhero1.image.url, null),
+                  ),
+                ))
               .build()),
       surfaceSize: const Size(328, 756),
     );

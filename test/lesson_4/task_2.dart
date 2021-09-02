@@ -29,8 +29,7 @@ import 'task_2.mocks.dart';
 void runTestLesson4Task2() {
   setUp(() {
     final values = <String, dynamic>{};
-    const MethodChannel('plugins.flutter.io/shared_preferences')
-        .setMockMethodCallHandler((MethodCall methodCall) async {
+    const MethodChannel('plugins.flutter.io/shared_preferences').setMockMethodCallHandler((MethodCall methodCall) async {
       if (methodCall.method == 'getAll') {
         return values; // set initial values here if desired
       } else if (methodCall.method.startsWith("set")) {
@@ -58,7 +57,10 @@ void runTestLesson4Task2() {
             textDirection: TextDirection.ltr,
             child: Provider.value(
               value: bloc,
-              child: main.ListTile(superhero: SuperheroInfo.fromSuperhero(superhero1), ableToSwipe: true,),
+              child: main.ListTile(
+                superhero: SuperheroInfo.fromSuperhero(superhero1),
+                ableToSwipe: true,
+              ),
             ),
           ),
         ),
@@ -69,8 +71,7 @@ void runTestLesson4Task2() {
       expect(
         dismissibleFinder,
         findsOneWidget,
-        reason:
-            "There should be a Dismissible widget on the main screen if favorite superheroes exist",
+        reason: "There should be a Dismissible widget on the main screen if favorite superheroes exist",
       );
 
       final Dismissible dismissible = tester.widget(dismissibleFinder);

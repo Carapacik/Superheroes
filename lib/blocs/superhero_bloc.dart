@@ -12,6 +12,7 @@ class SuperheroBloc {
   http.Client? client;
   final String id;
 
+  final BehaviorSubject<SuperheroPageState> superheroPageStateSubject = BehaviorSubject<SuperheroPageState>();
   final superheroSubject = BehaviorSubject<Superhero>();
   StreamSubscription? getFromFavoritesSubscription;
   StreamSubscription? requestSubscription;
@@ -28,12 +29,19 @@ class SuperheroBloc {
       (superhero) {
         if (superhero != null) {
           superheroSubject.add(superhero);
+          superheroPageStateSubject.add(SuperheroPageState.loaded);
+        } else {
+          requestSuperhero();
         }
-        requestSuperhero();
       },
-      onError: (error, stackTrace) => print("Error happened in addToFavorite: $error, $stackTrace"),
+      onError: (error, stackTrace) {
+        print("Error happened in addToFavorite: $error, $stackTrace");
+        superheroPageStateSubject.add(SuperheroPageState.error);
+      },
     );
   }
+
+  Stream<SuperheroPageState> observeSuperheroPageState() => superheroPageStateSubject;
 
   void addToFavorite() {
     final superhero = superheroSubject.valueOrNull;
@@ -44,6 +52,7 @@ class SuperheroBloc {
     addToFavoriteSubscription = FavoriteSuperheroesStorage.getInstance().addToFavorites(superhero).asStream().listen(
       (event) {
         print("Added to favorites: $event");
+        superheroPageStateSubject.add(SuperheroPageState.loaded);
       },
       onError: (error, stackTrace) => print("Error happened in addToFavorite: $error, $stackTrace"),
     );
@@ -63,10 +72,13 @@ class SuperheroBloc {
 
   void requestSuperhero() {
     requestSubscription?.cancel();
+    superheroPageStateSubject.add(SuperheroPageState.loading);
     requestSubscription = request().asStream().listen((superhero) {
       superheroSubject.add(superhero);
+      superheroPageStateSubject.add(SuperheroPageState.loaded);
     }, onError: (error, stackTrace) {
       print("Error happened in requestSuperhero: $error, $stackTrace");
+      superheroPageStateSubject.add(SuperheroPageState.error);
     });
   }
 
@@ -99,3 +111,5 @@ class SuperheroBloc {
     superheroSubject.close();
   }
 }
+
+enum SuperheroPageState { loading, loaded, error }
