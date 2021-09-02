@@ -123,7 +123,7 @@ class SuperheroAppBar extends StatelessWidget {
             color: SuperheroesColors.indigo,
             child: Center(
               child: Image.asset(
-                SuperheroesImages.unknownBig,
+                SuperheroesImages.unknown,
                 height: 264,
               ),
             ),
