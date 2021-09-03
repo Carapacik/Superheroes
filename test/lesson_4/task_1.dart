@@ -34,7 +34,7 @@ void runTestLesson4Task1() {
       if (methodCall.method == 'getAll') {
         return values; // set initial values here if desired
       } else if (methodCall.method.startsWith("set")) {
-        values[methodCall.arguments["key"]] = methodCall.arguments["value"];
+        values[methodCall.arguments["key"] as String] = methodCall.arguments["value"];
         return true;
       } else if (methodCall.method == "getInt") {
         return values[methodCall.arguments["key"]];
