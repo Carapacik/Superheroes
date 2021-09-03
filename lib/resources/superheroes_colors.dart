@@ -10,6 +10,6 @@ class SuperheroesColors {
   static const primaryBlue = Color(0xFF6200EE);
   static const red = Color(0xFF961B1B);
   static const grey = Color(0xFF727272);
+  static const secondaryGrey = Color(0xFF999999);
   static const green = Color(0xFF2AAB6A);
-  static const ultraGrey = Color(0xFF999999);
 }

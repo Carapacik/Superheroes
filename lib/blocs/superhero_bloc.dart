@@ -12,7 +12,7 @@ class SuperheroBloc {
   http.Client? client;
   final String id;
 
-  final BehaviorSubject<SuperheroPageState> superheroPageStateSubject = BehaviorSubject<SuperheroPageState>();
+  final superheroPageStateSubject = BehaviorSubject<SuperheroPageState>();
   final superheroSubject = BehaviorSubject<Superhero>();
   StreamSubscription? getFromFavoritesSubscription;
   StreamSubscription? requestSubscription;
@@ -31,8 +31,9 @@ class SuperheroBloc {
           superheroSubject.add(superhero);
           superheroPageStateSubject.add(SuperheroPageState.loaded);
         } else {
-          requestSuperhero();
+          superheroPageStateSubject.add(SuperheroPageState.loading);
         }
+        requestSuperhero(superhero != null);
       },
       onError: (error, stackTrace) {
         print("Error happened in addToFavorite: $error, $stackTrace");
@@ -40,8 +41,6 @@ class SuperheroBloc {
       },
     );
   }
-
-  Stream<SuperheroPageState> observeSuperheroPageState() => superheroPageStateSubject;
 
   void addToFavorite() {
     final superhero = superheroSubject.valueOrNull;
@@ -70,16 +69,24 @@ class SuperheroBloc {
 
   Stream<bool> observeIsFavorite() => FavoriteSuperheroesStorage.getInstance().observeIsFavorite(id);
 
-  void requestSuperhero() {
+  void requestSuperhero(final bool isInFavorite) {
     requestSubscription?.cancel();
     superheroPageStateSubject.add(SuperheroPageState.loading);
     requestSubscription = request().asStream().listen((superhero) {
       superheroSubject.add(superhero);
       superheroPageStateSubject.add(SuperheroPageState.loaded);
     }, onError: (error, stackTrace) {
+      if (!isInFavorite) {
+        superheroPageStateSubject.add(SuperheroPageState.error);
+      }
       print("Error happened in requestSuperhero: $error, $stackTrace");
       superheroPageStateSubject.add(SuperheroPageState.error);
     });
+  }
+
+  void retry() {
+    superheroPageStateSubject.add(SuperheroPageState.loading);
+    requestSuperhero(false);
   }
 
   Future<Superhero> request() async {
@@ -93,14 +100,18 @@ class SuperheroBloc {
     }
     final decoded = json.decode(response.body);
     if (decoded['response'] == 'success') {
-      return Superhero.fromJson(decoded as Map<String, dynamic>);
+      final superhero = Superhero.fromJson(decoded as Map<String, dynamic>);
+      await FavoriteSuperheroesStorage.getInstance().updateIfInFavorites(superhero);
+      return superhero;
     } else if (decoded['response'] == 'error') {
       throw ApiException("Client error happened");
     }
     throw Exception("Unknown error happened");
   }
 
-  Stream<Superhero> observeSuperhero() => superheroSubject;
+  Stream<Superhero> observeSuperhero() => superheroSubject.distinct();
+
+  Stream<SuperheroPageState> observeSuperheroPageState() => superheroPageStateSubject.distinct();
 
   void dispose() {
     client?.close();
@@ -109,6 +120,7 @@ class SuperheroBloc {
     addToFavoriteSubscription?.cancel();
     removeFromFavoriteSubscription?.cancel();
     superheroSubject.close();
+    superheroPageStateSubject.close();
   }
 }
 

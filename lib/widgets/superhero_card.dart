@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:superheroes/blocs/main_bloc.dart';
-import 'package:superheroes/model/alignment_info.dart';
+import 'package:superheroes/pages/superhero_page.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
 
@@ -31,33 +31,15 @@ class SuperheroCard extends StatelessWidget {
             _AvatarWidget(superheroInfo: superheroInfo),
             const SizedBox(width: 12),
             NameAndRealNameWidget(superheroInfo: superheroInfo),
-            if (superheroInfo.alignmentInfo != null) AlignmentWidget(alignmentInfo: superheroInfo.alignmentInfo!)
+            if (superheroInfo.alignmentInfo != null)
+              AlignmentWidget(
+                alignmentInfo: superheroInfo.alignmentInfo!,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class AlignmentWidget extends StatelessWidget {
-  const AlignmentWidget({
-    Key? key,
-    required this.alignmentInfo,
-  }) : super(key: key);
-
-  final AlignmentInfo alignmentInfo;
-
-  @override
-  Widget build(BuildContext context) {
-    return RotatedBox(
-      quarterTurns: 1,
-      child: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        color: alignmentInfo.color,
-        child: Text(
-          alignmentInfo.name.toUpperCase(),
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 10),
         ),
       ),
     );
