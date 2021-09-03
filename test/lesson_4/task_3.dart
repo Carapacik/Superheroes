@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -30,28 +30,13 @@ import 'task_3.mocks.dart';
 ///
 @GenerateMocks([http.Client])
 void runTestLesson4Task3() {
-  setUp(() {
-    final values = <String, dynamic>{};
-    const MethodChannel('plugins.flutter.io/shared_preferences').setMockMethodCallHandler((MethodCall methodCall) async {
-      if (methodCall.method == 'getAll') {
-        return values; // set initial values here if desired
-      } else if (methodCall.method.startsWith("set")) {
-        values[methodCall.arguments["key"] as String] = methodCall.arguments["value"];
-        return true;
-      } else if (methodCall.method == "getInt") {
-        return values[methodCall.arguments["key"]];
-      }
-      return null;
-    });
-  });
-
   testGoldens('module3', (WidgetTester tester) async {
     final client = MockClient();
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList("favorite_superheroes", []);
+    SharedPreferences.setMockInitialValues({"favorite_superheroes": []});
 
-    final uriCreator = (superheroId) => Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
+    final uriCreator = (superheroId) =>
+        Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
     when(client.get(uriCreator(superhero1.id))).thenAnswer(
       (_) async => http.Response(
         json.encode(superheroResponse1.toJson()),
@@ -107,12 +92,17 @@ void runTestLesson4Task3() {
                 ..addScenario(
                   'errorWidget',
                   widgetCreator(
-                    (context) => cachedNetworkImage.errorWidget!(context, superhero1.image.url, null),
+                    (context) =>
+                        cachedNetworkImage.errorWidget!(context, superhero1.image.url, null),
                   ),
                 ))
               .build()),
-      surfaceSize: const Size(328, 756),
+      surfaceSize: const Size(328, 800),
     );
-    await screenMatchesGolden(tester, 'superheroes_lesson_4_task_3', autoHeight: true);
+    await screenMatchesGolden(
+      tester,
+      'superheroes_lesson_4_task_3_${Platform.operatingSystem}',
+      autoHeight: true,
+    );
   });
 }

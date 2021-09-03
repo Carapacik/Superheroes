@@ -9,6 +9,7 @@ import 'lesson_4/task_3.dart';
 import 'lesson_4/task_4.dart';
 import 'lesson_4/task_7.dart';
 
+
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   await loadAppFonts();

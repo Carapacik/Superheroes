@@ -39,28 +39,30 @@ import 'task_7.mocks.dart';
 ///
 @GenerateMocks([http.Client])
 void runTestLesson4Task7() {
-  setUp(() {
-    final values = <String, dynamic>{};
-    const MethodChannel('plugins.flutter.io/shared_preferences').setMockMethodCallHandler((MethodCall methodCall) async {
-      if (methodCall.method == 'getAll') {
-        return values; // set initial values here if desired
-      } else if (methodCall.method.startsWith("set")) {
-        values[methodCall.arguments["key"] as String] = methodCall.arguments["value"];
-        return true;
-      } else if (methodCall.method == "getInt") {
-        return values[methodCall.arguments["key"]];
-      }
-      return null;
-    });
-  });
+  // setUp(() {
+  //   final values = <String, dynamic>{};
+  //   const MethodChannel('plugins.flutter.io/shared_preferences')
+  //       .setMockMethodCallHandler((MethodCall methodCall) async {
+  //     if (methodCall.method == 'getAll') {
+  //       return values; // set initial values here if desired
+  //     } else if (methodCall.method.startsWith("set")) {
+  //       values[methodCall.arguments["key"]] = methodCall.arguments["value"];
+  //       return true;
+  //     } else if (methodCall.method == "getInt") {
+  //       return values[methodCall.arguments["key"]];
+  //     }
+  //     return null;
+  //   });
+  // });
 
   testWidgets('module7', (WidgetTester tester) async {
     await mockNetworkImagesFor(() async {
       await tester.runAsync(() async {
         final client = MockClient();
-        final uriCreator = (superheroId) => Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setStringList("favorite_superheroes", []);
+        final uriCreator = (superheroId) =>
+            Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
+
+        SharedPreferences.setMockInitialValues({"favorite_superheroes": []});
 
         // CASE 1:
         // 1. no info about superhero in favorites
@@ -90,7 +92,9 @@ void runTestLesson4Task7() {
           ),
         );
 
-        await prefs.setStringList("favorite_superheroes", [json.encode(superhero2.toJson())]);
+        SharedPreferences.setMockInitialValues({
+          "favorite_superheroes": [json.encode(superhero2.toJson())],
+        });
 
         final bloc2 = SuperheroBloc(client: client, id: superhero2.id);
 
@@ -111,7 +115,9 @@ void runTestLesson4Task7() {
           ),
         );
 
-        await prefs.setStringList("favorite_superheroes", [json.encode(superhero3.toJson())]);
+        SharedPreferences.setMockInitialValues({
+          "favorite_superheroes": [json.encode(superhero3.toJson())],
+        });
 
         final bloc3 = SuperheroBloc(client: client, id: superhero3.id);
 
@@ -132,7 +138,7 @@ void runTestLesson4Task7() {
           ),
         );
 
-        await prefs.setStringList("favorite_superheroes", []);
+        SharedPreferences.setMockInitialValues({"favorite_superheroes": []});
 
         final bloc4 = SuperheroBloc(client: client, id: superhero3.id);
 

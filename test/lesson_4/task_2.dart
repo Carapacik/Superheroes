@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:http/http.dart' as http;
@@ -27,27 +28,11 @@ import 'task_2.mocks.dart';
 ///
 @GenerateMocks([http.Client])
 void runTestLesson4Task2() {
-  setUp(() {
-    final values = <String, dynamic>{};
-    const MethodChannel('plugins.flutter.io/shared_preferences').setMockMethodCallHandler((MethodCall methodCall) async {
-      if (methodCall.method == 'getAll') {
-        return values; // set initial values here if desired
-      } else if (methodCall.method.startsWith("set")) {
-        values[methodCall.arguments["key"] as String] = methodCall.arguments["value"];
-        return true;
-      } else if (methodCall.method == "getInt") {
-        return values[methodCall.arguments["key"]];
-      }
-      return null;
-    });
-  });
-
   testGoldens('module2', (WidgetTester tester) async {
     await mockNetworkImagesFor(() async {
       final client = MockClient();
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setStringList("favorite_superheroes", []);
+      SharedPreferences.setMockInitialValues({"favorite_superheroes": []});
 
       final bloc = MainBloc(client: client);
 
@@ -71,7 +56,8 @@ void runTestLesson4Task2() {
       expect(
         dismissibleFinder,
         findsOneWidget,
-        reason: "There should be a Dismissible widget on the main screen if favorite superheroes exist",
+        reason:
+            "There should be a Dismissible widget on the main screen if favorite superheroes exist",
       );
 
       final Dismissible dismissible = tester.widget(dismissibleFinder);
@@ -110,9 +96,13 @@ void runTestLesson4Task2() {
                     ),
                   ))
                 .build()),
-        surfaceSize: const Size(328, 240),
+        surfaceSize: const Size(328, 300),
       );
-      await screenMatchesGolden(tester, 'superheroes_lesson_4_task_2', autoHeight: true);
+      await screenMatchesGolden(
+        tester,
+        'superheroes_lesson_4_task_2_${Platform.operatingSystem}',
+        autoHeight: true,
+      );
       bloc.dispose();
     });
   });

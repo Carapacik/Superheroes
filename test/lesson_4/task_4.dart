@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,8 +23,8 @@ void runTestLesson4Task4() {
                 ..addScenario('neutral', BiographyWidget(biography: bio2))
                 ..addScenario('bad', BiographyWidget(biography: bio3)))
               .build()),
-      surfaceSize: const Size(328, 837),
+      surfaceSize: const Size(328, 900),
     );
-    await screenMatchesGolden(tester, 'superheroes_lesson_4_task_4', autoHeight: true);
+    await screenMatchesGolden(tester, 'superheroes_lesson_4_task_4_${Platform.operatingSystem}', autoHeight: true);
   });
 }
