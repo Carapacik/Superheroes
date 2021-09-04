@@ -71,7 +71,6 @@ class SuperheroBloc {
 
   void requestSuperhero(final bool isInFavorite) {
     requestSubscription?.cancel();
-    superheroPageStateSubject.add(SuperheroPageState.loading);
     requestSubscription = request().asStream().listen((superhero) {
       superheroSubject.add(superhero);
       superheroPageStateSubject.add(SuperheroPageState.loaded);
@@ -80,7 +79,6 @@ class SuperheroBloc {
         superheroPageStateSubject.add(SuperheroPageState.error);
       }
       print("Error happened in requestSuperhero: $error, $stackTrace");
-      superheroPageStateSubject.add(SuperheroPageState.error);
     });
   }
 

@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:superheroes/blocs/superhero_bloc.dart';
-import 'package:superheroes/model/alignment_info.dart';
 import 'package:superheroes/model/biography.dart';
 import 'package:superheroes/model/powerstats.dart';
 import 'package:superheroes/model/superhero.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_icons.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
+import 'package:superheroes/widgets/alignment_widget.dart';
 import 'package:superheroes/widgets/info_with_button.dart';
 
 class SuperheroPage extends StatefulWidget {
@@ -508,38 +508,6 @@ class BiographyField extends StatelessWidget {
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
         ),
       ],
-    );
-  }
-}
-
-class AlignmentWidget extends StatelessWidget {
-  const AlignmentWidget({
-    Key? key,
-    required this.alignmentInfo,
-    required this.borderRadius,
-  }) : super(key: key);
-
-  final AlignmentInfo alignmentInfo;
-  final BorderRadius borderRadius;
-
-  @override
-  Widget build(BuildContext context) {
-    return RotatedBox(
-      quarterTurns: 1,
-      child: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        height: 24,
-        width: 70,
-        decoration: BoxDecoration(
-          color: alignmentInfo.color,
-          borderRadius: borderRadius,
-        ),
-        child: Text(
-          alignmentInfo.name.toUpperCase(),
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 10),
-        ),
-      ),
     );
   }
 }
