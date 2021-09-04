@@ -91,6 +91,7 @@ class SuperheroBloc {
 
   Future<Superhero> request() async {
     final token = dotenv.env["SUPERHERO_TOKEN"];
+    await Future.delayed(const Duration(milliseconds: 500));
     final response = await (client ??= http.Client()).get(Uri.parse("https://superheroapi.com/api/$token/$id"));
     if (response.statusCode >= 500 && response.statusCode <= 599) {
       throw ApiException("Server error happened");
