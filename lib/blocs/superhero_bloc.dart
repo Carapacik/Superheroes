@@ -71,15 +71,18 @@ class SuperheroBloc {
 
   void requestSuperhero(final bool isInFavorite) {
     requestSubscription?.cancel();
-    requestSubscription = request().asStream().listen((superhero) {
-      superheroSubject.add(superhero);
-      superheroPageStateSubject.add(SuperheroPageState.loaded);
-    }, onError: (error, stackTrace) {
-      if (!isInFavorite) {
-        superheroPageStateSubject.add(SuperheroPageState.error);
-      }
-      print("Error happened in requestSuperhero: $error, $stackTrace");
-    });
+    requestSubscription = request().asStream().listen(
+      (superhero) {
+        superheroSubject.add(superhero);
+        superheroPageStateSubject.add(SuperheroPageState.loaded);
+      },
+      onError: (error, stackTrace) {
+        if (!isInFavorite) {
+          superheroPageStateSubject.add(SuperheroPageState.error);
+        }
+        print("Error happened in requestSuperhero: $error, $stackTrace");
+      },
+    );
   }
 
   void retry() {

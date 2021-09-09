@@ -23,9 +23,10 @@ class MainBloc {
 
   MainBloc({this.client}) {
     textSubscription = Rx.combineLatest2<String, List<Superhero>, MainPageStateInfo>(
-        currentTextSubject.distinct().debounceTime(const Duration(milliseconds: 500)),
-        FavoriteSuperheroesStorage.getInstance().observeFavoriteSuperheroes(),
-        (searchText, haveFavorites) => MainPageStateInfo(searchText, haveFavorites.isNotEmpty)).listen((value) {
+      currentTextSubject.distinct().debounceTime(const Duration(milliseconds: 500)),
+      FavoriteSuperheroesStorage.getInstance().observeFavoriteSuperheroes(),
+      (searchText, haveFavorites) => MainPageStateInfo(searchText, haveFavorites.isNotEmpty),
+    ).listen((value) {
       searchSubscription?.cancel();
       if (value.searchText.isEmpty) {
         if (value.haveFavorites) {

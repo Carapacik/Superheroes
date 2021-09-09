@@ -6,14 +6,13 @@ part of 'biography.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Biography _$BiographyFromJson(Map<String, dynamic> json) {
-  return Biography(
-    aliases: (json['aliases'] as List<dynamic>).map((e) => e as String).toList(),
-    alignment: json['alignment'] as String,
-    fullName: json['full-name'] as String,
-    placeOfBirth: json['place-of-birth'] as String,
-  );
-}
+Biography _$BiographyFromJson(Map<String, dynamic> json) => Biography(
+      aliases:
+          (json['aliases'] as List<dynamic>).map((e) => e as String).toList(),
+      alignment: json['alignment'] as String,
+      fullName: json['full-name'] as String,
+      placeOfBirth: json['place-of-birth'] as String,
+    );
 
 Map<String, dynamic> _$BiographyToJson(Biography instance) => <String, dynamic>{
       'full-name': instance.fullName,
