@@ -56,8 +56,7 @@ void runTestLesson4Task2() {
       expect(
         dismissibleFinder,
         findsOneWidget,
-        reason:
-            "There should be a Dismissible widget on the main screen if favorite superheroes exist",
+        reason: "There should be a Dismissible widget on the main screen if favorite superheroes exist",
       );
 
       final Dismissible dismissible = tester.widget(dismissibleFinder);

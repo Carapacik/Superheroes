@@ -10,8 +10,7 @@ class OneOrAnotherMatcher extends Matcher {
 
   @override
   Description describe(Description description) {
-    return description
-        .add('either ${_one.runtimeType}:<$_one> or ${_another.runtimeType}:<$_another>');
+    return description.add('either ${_one.runtimeType}:<$_one> or ${_another.runtimeType}:<$_another>');
   }
 
   @override

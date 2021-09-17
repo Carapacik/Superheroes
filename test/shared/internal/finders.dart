@@ -12,10 +12,10 @@ Finder findTypeByTextOnlyInParentType(
 }
 
 Finder findTypeByChildTypeOnlyInParentType(
-    final Type type,
-    final Type childType,
-    final Type parentType,
-    ) {
+  final Type type,
+  final Type childType,
+  final Type parentType,
+) {
   return find.descendant(
     of: find.byType(parentType),
     matching: find.ancestor(of: find.byType(childType), matching: find.byType(type)),

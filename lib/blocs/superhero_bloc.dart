@@ -36,7 +36,6 @@ class SuperheroBloc {
         requestSuperhero(superhero != null);
       },
       onError: (error, stackTrace) {
-        print("Error happened in addToFavorite: $error, $stackTrace");
         superheroPageStateSubject.add(SuperheroPageState.error);
       },
     );
@@ -50,7 +49,6 @@ class SuperheroBloc {
     addToFavoriteSubscription?.cancel();
     addToFavoriteSubscription = FavoriteSuperheroesStorage.getInstance().addToFavorites(superhero).asStream().listen(
       (event) {
-        print("Added to favorites: $event");
         superheroPageStateSubject.add(SuperheroPageState.loaded);
       },
       onError: (error, stackTrace) => print("Error happened in addToFavorite: $error, $stackTrace"),
@@ -61,7 +59,6 @@ class SuperheroBloc {
     removeFromFavoriteSubscription?.cancel();
     removeFromFavoriteSubscription = FavoriteSuperheroesStorage.getInstance().removeFromFavorites(id).asStream().listen(
       (event) {
-        print("Removed from favorites: $event");
       },
       onError: (error, stackTrace) => print("Error happened in addToFavorite: $error, $stackTrace"),
     );
@@ -80,7 +77,6 @@ class SuperheroBloc {
         if (!isInFavorite) {
           superheroPageStateSubject.add(SuperheroPageState.error);
         }
-        print("Error happened in requestSuperhero: $error, $stackTrace");
       },
     );
   }

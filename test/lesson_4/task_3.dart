@@ -35,8 +35,7 @@ void runTestLesson4Task3() {
 
     SharedPreferences.setMockInitialValues({"favorite_superheroes": []});
 
-    final uriCreator = (superheroId) =>
-        Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
+    final uriCreator = (superheroId) => Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
     when(client.get(uriCreator(superhero1.id))).thenAnswer(
       (_) async => http.Response(
         json.encode(superheroResponse1.toJson()),
@@ -92,8 +91,7 @@ void runTestLesson4Task3() {
                 ..addScenario(
                   'errorWidget',
                   widgetCreator(
-                    (context) =>
-                        cachedNetworkImage.errorWidget!(context, superhero1.image.url, null),
+                    (context) => cachedNetworkImage.errorWidget!(context, superhero1.image.url, null),
                   ),
                 ))
               .build()),

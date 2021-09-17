@@ -1,4 +1,3 @@
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -8,7 +7,6 @@ import 'lesson_4/task_2.dart';
 import 'lesson_4/task_3.dart';
 import 'lesson_4/task_4.dart';
 import 'lesson_4/task_7.dart';
-
 
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();

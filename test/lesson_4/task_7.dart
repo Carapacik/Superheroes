@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -59,8 +58,7 @@ void runTestLesson4Task7() {
     await mockNetworkImagesFor(() async {
       await tester.runAsync(() async {
         final client = MockClient();
-        final uriCreator = (superheroId) =>
-            Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
+        final uriCreator = (superheroId) => Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
 
         SharedPreferences.setMockInitialValues({"favorite_superheroes": []});
 
