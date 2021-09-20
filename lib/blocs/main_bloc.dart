@@ -18,7 +18,9 @@ class MainBloc {
   StreamSubscription? textSubscription;
   StreamSubscription? searchSubscription;
   StreamSubscription? removeFromFavoriteSubscription;
+
   Stream<List<SuperheroInfo>> observeSearchedSuperheroes() => searchedSuperheroSubject;
+
   Stream<MainPageState> observeMainPageState() => stateSubject;
 
   http.Client? client;
@@ -80,7 +82,6 @@ class MainBloc {
         .map((superheroes) => superheroes.map((superhero) => SuperheroInfo.fromSuperhero(superhero)).toList());
   }
 
-
   Future<List<SuperheroInfo>> search(final String text) async {
     final token = dotenv.env["SUPERHERO_TOKEN"];
     final response = await (client ??= http.Client()).get(Uri.parse("https://superheroapi.com/api/$token/search/$text"));
@@ -105,7 +106,6 @@ class MainBloc {
 
     throw Exception("Unknown error happened");
   }
-
 
   void nextState() {
     final currentState = stateSubject.value;

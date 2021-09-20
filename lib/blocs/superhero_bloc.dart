@@ -58,10 +58,9 @@ class SuperheroBloc {
   void removeFromFavorites() {
     removeFromFavoriteSubscription?.cancel();
     removeFromFavoriteSubscription = FavoriteSuperheroesStorage.getInstance().removeFromFavorites(id).asStream().listen(
-      (event) {
-      },
-      onError: (error, stackTrace) => print("Error happened in addToFavorite: $error, $stackTrace"),
-    );
+          (event) {},
+          onError: (error, stackTrace) => print("Error happened in addToFavorite: $error, $stackTrace"),
+        );
   }
 
   Stream<bool> observeIsFavorite() => FavoriteSuperheroesStorage.getInstance().observeIsFavorite(id);

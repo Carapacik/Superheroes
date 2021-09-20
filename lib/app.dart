@@ -13,6 +13,8 @@ class App extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
+      debugShowCheckedModeBanner: false,
+      title: "Superheroes",
       home: const MainPage(),
     );
   }
