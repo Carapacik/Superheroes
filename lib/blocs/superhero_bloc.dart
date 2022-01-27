@@ -29,7 +29,7 @@ class SuperheroBloc {
         .getSuperhero(id)
         .asStream()
         .listen(
-          (superhero) {
+      (superhero) {
         if (superhero != null) {
           superheroSubject.add(superhero);
           superheroPageStateSubject.add(SuperheroPageState.loaded);
@@ -54,7 +54,7 @@ class SuperheroBloc {
         .addToFavorites(superhero)
         .asStream()
         .listen(
-          (event) {
+      (event) {
         superheroPageStateSubject.add(SuperheroPageState.loaded);
       },
       onError: (error, stackTrace) {},
@@ -68,17 +68,14 @@ class SuperheroBloc {
         .asStream()
         .listen(
           (event) {},
-      onError: (error, stackTrace) {},
-    );
+          onError: (error, stackTrace) {},
+        );
   }
-
-  Stream<bool> observeIsFavorite() =>
-      FavoriteSuperheroesStorage.getInstance().observeIsFavorite(id);
 
   void requestSuperhero({required final bool isInFavorite}) {
     requestSubscription?.cancel();
     requestSubscription = request().asStream().listen(
-          (superhero) {
+      (superhero) {
         superheroSubject.add(superhero);
         superheroPageStateSubject.add(SuperheroPageState.loaded);
       },
@@ -117,6 +114,9 @@ class SuperheroBloc {
     }
     throw Exception("Unknown error happened");
   }
+
+  Stream<bool> observeIsFavorite() =>
+      FavoriteSuperheroesStorage.getInstance().observeIsFavorite(id);
 
   Stream<Superhero> observeSuperhero() => superheroSubject.distinct();
 
