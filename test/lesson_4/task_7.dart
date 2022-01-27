@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:network_image_mock/network_image_mock.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:superheroes/blocs/superhero_bloc.dart';
 
@@ -38,27 +39,16 @@ import 'task_7.mocks.dart';
 ///
 @GenerateMocks([http.Client])
 void runTestLesson4Task7() {
-  // setUp(() {
-  //   final values = <String, dynamic>{};
-  //   const MethodChannel('plugins.flutter.io/shared_preferences')
-  //       .setMockMethodCallHandler((MethodCall methodCall) async {
-  //     if (methodCall.method == 'getAll') {
-  //       return values; // set initial values here if desired
-  //     } else if (methodCall.method.startsWith("set")) {
-  //       values[methodCall.arguments["key"]] = methodCall.arguments["value"];
-  //       return true;
-  //     } else if (methodCall.method == "getInt") {
-  //       return values[methodCall.arguments["key"]];
-  //     }
-  //     return null;
-  //   });
-  // });
+  setUp(() {
+    PathProviderPlatform.instance = FakePathProviderPlatform();
+  });
 
   testWidgets('module7', (WidgetTester tester) async {
     await mockNetworkImagesFor(() async {
       await tester.runAsync(() async {
         final client = MockClient();
-        final uriCreator = (superheroId) => Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
+        final uriCreator = (superheroId) => Uri.parse(
+            "https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
 
         SharedPreferences.setMockInitialValues({"favorite_superheroes": []});
 

@@ -11,7 +11,8 @@ class FavoriteSuperheroesStorage {
 
   static FavoriteSuperheroesStorage? _instance;
 
-  factory FavoriteSuperheroesStorage.getInstance() => _instance ??= FavoriteSuperheroesStorage._internal();
+  factory FavoriteSuperheroesStorage.getInstance() =>
+      _instance ??= FavoriteSuperheroesStorage._internal();
 
   FavoriteSuperheroesStorage._internal();
 
@@ -41,11 +42,16 @@ class FavoriteSuperheroesStorage {
 
   Future<List<Superhero>> _getSuperheroes() async {
     final rawSuperheroes = await _getRawSuperheroes();
-    return rawSuperheroes.map((rawSuperhero) => Superhero.fromJson(json.decode(rawSuperhero) as Map<String, dynamic>)).toList();
+    return rawSuperheroes
+        .map((rawSuperhero) => Superhero.fromJson(
+            json.decode(rawSuperhero) as Map<String, dynamic>))
+        .toList();
   }
 
   Future<bool> _setSuperheroes(final List<Superhero> superheroes) async {
-    final rawSuperheroes = superheroes.map((superhero) => json.encode(superhero.toJson())).toList();
+    final rawSuperheroes = superheroes
+        .map((superhero) => json.encode(superhero.toJson()))
+        .toList();
     return _setRawSuperheroes(rawSuperheroes);
   }
 
@@ -67,12 +73,14 @@ class FavoriteSuperheroesStorage {
   }
 
   Stream<bool> observeIsFavorite(final String id) {
-    return observeFavoriteSuperheroes().map((superheroes) => superheroes.any((element) => element.id == id));
+    return observeFavoriteSuperheroes()
+        .map((superheroes) => superheroes.any((element) => element.id == id));
   }
 
   Future<bool> updateIfInFavorites(final Superhero newSuperhero) async {
     final superheroes = await _getSuperheroes();
-    final index = superheroes.indexWhere((superhero) => superhero.id == newSuperhero.id);
+    final index =
+        superheroes.indexWhere((superhero) => superhero.id == newSuperhero.id);
     if (index == -1) {
       return false;
     }

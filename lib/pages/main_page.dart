@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:superheroes/blocs/main_bloc.dart';
@@ -134,7 +132,9 @@ class _SearchWidgetState extends State<SearchWidget> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: haveSearchedText ? const BorderSide(color: Colors.white, width: 2) : const BorderSide(color: Colors.white24),
+          borderSide: haveSearchedText
+              ? const BorderSide(color: Colors.white, width: 2)
+              : const BorderSide(color: Colors.white24),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -171,9 +171,11 @@ class MainPageStateWidget extends StatelessWidget {
           case MainPageState.minSymbols:
             return const MinSymbolsWidget();
           case MainPageState.noFavorites:
-            return NoFavoritesWidget(searchFiledFocusNode: searchFiledFocusNode);
+            return NoFavoritesWidget(
+                searchFiledFocusNode: searchFiledFocusNode);
           case MainPageState.nothingFound:
-            return NothingFoundWidget(searchFiledFocusNode: searchFiledFocusNode);
+            return NothingFoundWidget(
+                searchFiledFocusNode: searchFiledFocusNode);
           case MainPageState.loadingError:
             return const LoadingErrorWidget();
           case MainPageState.favorites:
@@ -418,7 +420,8 @@ class MinSymbolsWidget extends StatelessWidget {
         padding: EdgeInsets.only(top: 110),
         child: Text(
           "Enter at least 3 symbols",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
         ),
       ),
     );

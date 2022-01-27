@@ -4,11 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:network_image_mock/network_image_mock.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/pages/main_page.dart' as main;
 
+import '../shared/test_helpers.dart';
 import 'model/mocked_models.dart';
 import 'task_1.mocks.dart';
 
@@ -29,25 +31,28 @@ import 'task_1.mocks.dart';
 void runTestLesson4Task1() {
   setUp(() {
     final values = <String, dynamic>{};
-    const MethodChannel('plugins.flutter.io/shared_preferences').setMockMethodCallHandler((MethodCall methodCall) async {
+    const MethodChannel('plugins.flutter.io/shared_preferences')
+        .setMockMethodCallHandler((MethodCall methodCall) async {
       if (methodCall.method == 'getAll') {
         return values; // set initial values here if desired
       } else if (methodCall.method.startsWith("set")) {
-        values[methodCall.arguments["key"]] = methodCall.arguments["value"];
+        values[methodCall.arguments["key"] as String] =
+            methodCall.arguments["value"];
         return true;
       } else if (methodCall.method == "getInt") {
         return values[methodCall.arguments["key"]];
       }
       return null;
     });
+
+    PathProviderPlatform.instance = FakePathProviderPlatform();
   });
 
   testWidgets('module1', (WidgetTester tester) async {
     await tester.runAsync(() async {
       await mockNetworkImagesFor(() async {
         final client = MockClient();
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setStringList("favorite_superheroes", []);
+        SharedPreferences.setMockInitialValues({"favorite_superheroes": []});
 
         final bloc = MainBloc(client: client);
 
@@ -69,7 +74,8 @@ void runTestLesson4Task1() {
         expect(
           find.byType(Dismissible),
           findsNothing,
-          reason: "If you pass ableToSwipe: false into ListTile, you should not use Dismissible widget",
+          reason:
+              "If you pass ableToSwipe: false into ListTile, you should not use Dismissible widget",
         );
 
         await tester.pumpWidget(
@@ -90,7 +96,8 @@ void runTestLesson4Task1() {
         expect(
           find.byType(Dismissible),
           findsOneWidget,
-          reason: "If you pass ableToSwipe: true into ListTile, you should use Dismissible widget",
+          reason:
+              "If you pass ableToSwipe: true into ListTile, you should use Dismissible widget",
         );
       });
     });

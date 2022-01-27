@@ -40,7 +40,8 @@ final superhero1 = Superhero(
   id: "70",
   name: "Batman",
   biography: bio1,
-  image: ServerImage("https://www.superherodb.com/pictures2/portraits/10/100/639.jpg"),
+  image: ServerImage(
+      "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg"),
   powerstats: powerstats1,
 );
 
@@ -57,7 +58,8 @@ final superhero2 = Superhero(
   id: "80",
   name: "Ironman",
   biography: bio2,
-  image: ServerImage("https://www.superherodb.com/pictures2/portraits/10/100/100.jpg"),
+  image: ServerImage(
+      "https://www.superherodb.com/pictures2/portraits/10/100/100.jpg"),
   powerstats: powerstats1,
 );
 
@@ -74,7 +76,8 @@ final superhero3 = Superhero(
   id: "90",
   name: "Saloman",
   biography: bio3,
-  image: ServerImage("https://www.superherodb.com/pictures2/portraits/10/100/89.jpg"),
+  image: ServerImage(
+      "https://www.superherodb.com/pictures2/portraits/10/100/89.jpg"),
   powerstats: powerstats1,
 );
 
@@ -96,7 +99,8 @@ final superhero4 = Superhero(
   id: "180",
   name: "Chelovek-Nauk",
   biography: bio2,
-  image: ServerImage("https://www.superherodb.com/pictures2/portraits/10/100/200.jpg"),
+  image: ServerImage(
+      "https://www.superherodb.com/pictures2/portraits/10/100/200.jpg"),
   powerstats: powerstats1,
 );
 
@@ -113,7 +117,8 @@ final superhero5 = Superhero(
   id: "222",
   name: "Chelovek Molekula",
   biography: bio3,
-  image: ServerImage("https://www.superherodb.com/pictures2/portraits/10/100/222.jpg"),
+  image: ServerImage(
+      "https://www.superherodb.com/pictures2/portraits/10/100/222.jpg"),
   powerstats: powerstats1,
 );
 

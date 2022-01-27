@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:http/http.dart' as http;
@@ -28,6 +29,13 @@ import 'task_2.mocks.dart';
 ///
 @GenerateMocks([http.Client])
 void runTestLesson4Task2() {
+  setUp(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    MethodChannel('plugins.flutter.io/path_provider')
+        .setMockMethodCallHandler((MethodCall methodCall) async {
+      return ".";
+    });
+  });
   testGoldens('module2', (WidgetTester tester) async {
     await mockNetworkImagesFor(() async {
       final client = MockClient();
@@ -56,7 +64,8 @@ void runTestLesson4Task2() {
       expect(
         dismissibleFinder,
         findsOneWidget,
-        reason: "There should be a Dismissible widget on the main screen if favorite superheroes exist",
+        reason:
+            "There should be a Dismissible widget on the main screen if favorite superheroes exist",
       );
 
       final Dismissible dismissible = tester.widget(dismissibleFinder);
@@ -70,7 +79,8 @@ void runTestLesson4Task2() {
       expect(
         dismissible.secondaryBackground,
         isNotNull,
-        reason: "secondaryBackground property in Dismissible should not be null",
+        reason:
+            "secondaryBackground property in Dismissible should not be null",
       );
 
       await tester.pumpWidgetBuilder(

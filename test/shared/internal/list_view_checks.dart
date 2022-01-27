@@ -19,7 +19,8 @@ void checkListViewSeparatedType({
     expect(
       realItemsCount,
       (listView.childrenDelegate as SliverChildBuilderDelegate).childCount,
-      reason: "$widgetName should have $realItemsCount itemCount (including separators)",
+      reason:
+          "$widgetName should have $realItemsCount itemCount (including separators)",
     );
   }
 }

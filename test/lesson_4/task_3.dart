@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,9 +9,11 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:superheroes/pages/superhero_page.dart';
 
+import '../shared/test_helpers.dart';
 import 'model/mocked_models.dart';
 import 'task_3.mocks.dart';
 
@@ -30,12 +31,17 @@ import 'task_3.mocks.dart';
 ///
 @GenerateMocks([http.Client])
 void runTestLesson4Task3() {
+  setUp(() {
+    PathProviderPlatform.instance = FakePathProviderPlatform();
+  });
+
   testGoldens('module3', (WidgetTester tester) async {
     final client = MockClient();
 
     SharedPreferences.setMockInitialValues({"favorite_superheroes": []});
 
-    final uriCreator = (superheroId) => Uri.parse("https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
+    final uriCreator = (superheroId) => Uri.parse(
+        "https://superheroapi.com/api/${dotenv.env["SUPERHERO_TOKEN"]}/$superheroId");
     when(client.get(uriCreator(superhero1.id))).thenAnswer(
       (_) async => http.Response(
         json.encode(superheroResponse1.toJson()),
@@ -54,7 +60,8 @@ void runTestLesson4Task3() {
       findsOneWidget,
       reason: "There should be a CachedNetworkImage widget in SuperheroAppBar",
     );
-    final CachedNetworkImage cachedNetworkImage = tester.widget(cachedNetworkImageFinder);
+    final CachedNetworkImage cachedNetworkImage =
+        tester.widget(cachedNetworkImageFinder);
     expect(
       cachedNetworkImage.placeholder,
       isNotNull,
@@ -66,18 +73,19 @@ void runTestLesson4Task3() {
       reason: "errorWidget property in CachedNetworkImage shouldn't be null",
     );
 
-    final widgetCreator = (Widget widgetCreator(BuildContext context)) => Material(
-          child: Directionality(
-            textDirection: TextDirection.ltr,
-            child: Builder(builder: (context) {
-              return SizedBox(
-                height: 328,
-                width: 360,
-                child: widgetCreator(context),
-              );
-            }),
-          ),
-        );
+    final widgetCreator =
+        (Widget widgetCreator(BuildContext context)) => Material(
+              child: Directionality(
+                textDirection: TextDirection.ltr,
+                child: Builder(builder: (context) {
+                  return SizedBox(
+                    height: 328,
+                    width: 360,
+                    child: widgetCreator(context),
+                  );
+                }),
+              ),
+            );
 
     await tester.pumpWidgetBuilder(
       Center(
@@ -85,13 +93,15 @@ void runTestLesson4Task3() {
                 ..addScenario(
                   'placeholder',
                   widgetCreator(
-                    (context) => cachedNetworkImage.placeholder!(context, superhero1.image.url),
+                    (context) => cachedNetworkImage.placeholder!(
+                        context, superhero1.image.url),
                   ),
                 )
                 ..addScenario(
                   'errorWidget',
                   widgetCreator(
-                    (context) => cachedNetworkImage.errorWidget!(context, superhero1.image.url, null),
+                    (context) => cachedNetworkImage.errorWidget!(
+                        context, superhero1.image.url, null),
                   ),
                 ))
               .build()),

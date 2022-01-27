@@ -18,6 +18,7 @@ Finder findTypeByChildTypeOnlyInParentType(
 ) {
   return find.descendant(
     of: find.byType(parentType),
-    matching: find.ancestor(of: find.byType(childType), matching: find.byType(type)),
+    matching:
+        find.ancestor(of: find.byType(childType), matching: find.byType(type)),
   );
 }

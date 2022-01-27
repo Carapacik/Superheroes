@@ -9,7 +9,8 @@ class SearchResponse {
   final String? error;
   final List<Superhero>? results;
 
-  factory SearchResponse.fromJson(final Map<String, dynamic> json) => _$SearchResponseFromJson(json);
+  factory SearchResponse.fromJson(final Map<String, dynamic> json) =>
+      _$SearchResponseFromJson(json);
 
   SearchResponse({required this.result, this.error, this.results});
 

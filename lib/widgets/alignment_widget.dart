@@ -26,7 +26,8 @@ class AlignmentWidget extends StatelessWidget {
         ),
         child: Text(
           alignmentInfo.name.toUpperCase(),
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 10),
+          style: const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w700, fontSize: 10),
         ),
       ),
     );
