@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -97,7 +96,8 @@ class SuperheroLoadingWidget extends StatelessWidget {
             alignment: Alignment.topCenter,
             height: 44,
             width: 44,
-            child: const CircularProgressIndicator(color: SuperheroesColors.blue),
+            child:
+                const CircularProgressIndicator(color: SuperheroesColors.blue),
           ),
         ),
       ],
@@ -155,7 +155,8 @@ class SuperheroLoadedWidget extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 30),
-                  if (superhero.powerstats.isNotNull()) PowerStatsWidget(powerstats: superhero.powerstats),
+                  if (superhero.powerstats.isNotNull())
+                    PowerStatsWidget(powerstats: superhero.powerstats),
                   BiographyWidget(biography: superhero.biography),
                   const SizedBox(height: 30),
                 ],
@@ -198,7 +199,8 @@ class SuperheroAppBar extends StatelessWidget {
         background: CachedNetworkImage(
           imageUrl: superhero.image.url,
           fit: BoxFit.cover,
-          placeholder: (context, url) => const ColoredBox(color: SuperheroesColors.indigo),
+          placeholder: (context, url) =>
+              const ColoredBox(color: SuperheroesColors.indigo),
           errorWidget: (context, url, error) => Container(
             alignment: Alignment.center,
             color: SuperheroesColors.indigo,
@@ -224,15 +226,19 @@ class FavoriteButton extends StatelessWidget {
       stream: bloc.observeIsFavorite(),
       initialData: false,
       builder: (context, snapshot) {
-        final favorite = !snapshot.hasData || snapshot.data == null || snapshot.data!;
+        final favorite =
+            !snapshot.hasData || snapshot.data == null || snapshot.data!;
         return GestureDetector(
-          onTap: () => favorite ? bloc.removeFromFavorites() : bloc.addToFavorite(),
+          onTap: () =>
+              favorite ? bloc.removeFromFavorites() : bloc.addToFavorite(),
           child: Container(
             height: 52,
             width: 52,
             alignment: Alignment.center,
             child: Image.asset(
-              favorite ? SuperheroesIcons.starFilled : SuperheroesIcons.starEmpty,
+              favorite
+                  ? SuperheroesIcons.starFilled
+                  : SuperheroesIcons.starEmpty,
               height: 32,
               width: 32,
             ),
@@ -259,7 +265,11 @@ class PowerStatsWidget extends StatelessWidget {
         Center(
           child: Text(
             "Powerstats".toUpperCase(),
-            style: const TextStyle(fontWeight: FontWeight.w800, color: Colors.white, fontSize: 18),
+            style: const TextStyle(
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+              fontSize: 18,
+            ),
           ),
         ),
         const SizedBox(height: 24),
@@ -350,14 +360,22 @@ class PowerstatWidget extends StatelessWidget {
           padding: const EdgeInsets.only(top: 17),
           child: Text(
             (value * 100).toInt().toString(),
-            style: TextStyle(color: calculateColorByValue(), fontWeight: FontWeight.w800, fontSize: 18),
+            style: TextStyle(
+              color: calculateColorByValue(),
+              fontWeight: FontWeight.w800,
+              fontSize: 18,
+            ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 44),
           child: Text(
             name.toUpperCase(),
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 12,
+            ),
           ),
         ),
       ],
@@ -366,9 +384,17 @@ class PowerstatWidget extends StatelessWidget {
 
   Color calculateColorByValue() {
     if (value <= 0.5) {
-      return Color.lerp(Colors.red, Colors.orangeAccent, value / 0.5)!;
+      return Color.lerp(
+        Colors.red,
+        Colors.orangeAccent,
+        value / 0.5,
+      )!;
     } else {
-      return Color.lerp(Colors.orangeAccent, Colors.green, (value - 0.5) / 0.5)!;
+      return Color.lerp(
+        Colors.orangeAccent,
+        Colors.green,
+        (value - 0.5) / 0.5,
+      )!;
     }
   }
 }
@@ -443,14 +469,19 @@ class BiographyWidget extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Center(
                   child: Text(
                     "Bio".toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -459,9 +490,15 @@ class BiographyWidget extends StatelessWidget {
                   fieldValue: biography.fullName,
                 ),
                 const SizedBox(height: 20),
-                BiographyField(fieldName: "Aliases", fieldValue: biography.aliases.join(", ")),
+                BiographyField(
+                  fieldName: "Aliases",
+                  fieldValue: biography.aliases.join(", "),
+                ),
                 const SizedBox(height: 20),
-                BiographyField(fieldName: "Place of birth", fieldValue: biography.placeOfBirth),
+                BiographyField(
+                  fieldName: "Place of birth",
+                  fieldValue: biography.placeOfBirth,
+                ),
               ],
             ),
           ),
@@ -500,12 +537,20 @@ class BiographyField extends StatelessWidget {
       children: [
         Text(
           fieldName.toUpperCase(),
-          style: const TextStyle(color: SuperheroesColors.secondaryGrey, fontWeight: FontWeight.w700, fontSize: 12),
+          style: const TextStyle(
+            color: SuperheroesColors.secondaryGrey,
+            fontWeight: FontWeight.w700,
+            fontSize: 12,
+          ),
         ),
         const SizedBox(height: 4),
         Text(
           fieldValue,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
         ),
       ],
     );

@@ -16,7 +16,8 @@ class SuperheroResponse {
   final ServerImage? image;
   final Powerstats? powerstats;
 
-  factory SuperheroResponse.fromJson(final Map<String, dynamic> json) => _$SuperheroResponseFromJson(json);
+  factory SuperheroResponse.fromJson(final Map<String, dynamic> json) =>
+      _$SuperheroResponseFromJson(json);
 
   SuperheroResponse({
     required this.response,

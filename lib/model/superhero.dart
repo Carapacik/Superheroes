@@ -21,23 +21,29 @@ class Superhero {
     required this.powerstats,
   });
 
-  factory Superhero.fromJson(Map<String, dynamic> json) => _$SuperheroFromJson(json);
+  factory Superhero.fromJson(Map<String, dynamic> json) =>
+      _$SuperheroFromJson(json);
 
   Map<String, dynamic> toJson() => _$SuperheroToJson(this);
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Superhero &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          name == other.name &&
-          biography == other.biography &&
-          image == other.image &&
-          powerstats == other.powerstats;
+          other is Superhero &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              name == other.name &&
+              biography == other.biography &&
+              image == other.image &&
+              powerstats == other.powerstats;
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ biography.hashCode ^ image.hashCode ^ powerstats.hashCode;
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      biography.hashCode ^
+      image.hashCode ^
+      powerstats.hashCode;
 
   @override
   String toString() {
