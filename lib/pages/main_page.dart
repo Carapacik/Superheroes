@@ -172,10 +172,12 @@ class MainPageStateWidget extends StatelessWidget {
             return const MinSymbolsWidget();
           case MainPageState.noFavorites:
             return NoFavoritesWidget(
-                searchFiledFocusNode: searchFiledFocusNode);
+              searchFiledFocusNode: searchFiledFocusNode,
+            );
           case MainPageState.nothingFound:
             return NothingFoundWidget(
-                searchFiledFocusNode: searchFiledFocusNode);
+              searchFiledFocusNode: searchFiledFocusNode,
+            );
           case MainPageState.loadingError:
             return const LoadingErrorWidget();
           case MainPageState.favorites:
@@ -297,6 +299,7 @@ class SuperheroesList extends StatelessWidget {
         }
         final List<SuperheroInfo> superheroes = snapshot.data!;
         return ListView.separated(
+          padding: const EdgeInsets.symmetric(vertical: 10),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           itemCount: superheroes.length + 1,
           itemBuilder: (BuildContext context, int index) {
@@ -421,7 +424,10 @@ class MinSymbolsWidget extends StatelessWidget {
         child: Text(
           "Enter at least 3 symbols",
           style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
         ),
       ),
     );
