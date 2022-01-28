@@ -89,8 +89,9 @@ class MainBloc {
 
   Future<List<SuperheroInfo>> search(final String text) async {
     final token = dotenv.env["SUPERHERO_TOKEN"];
-    final response = await (client ??= http.Client())
-        .get(Uri.parse("https://superheroapi.com/api/$token/search/$text"));
+    final response = await (client ??= http.Client()).get(
+      Uri.parse("https://superheroapi.com/api/$token/search/$text"),
+    );
     if (response.statusCode >= 500 && response.statusCode <= 599) {
       throw ApiException("Server error happened");
     }
