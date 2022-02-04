@@ -2,7 +2,6 @@
     package="com.carapacik.superheroes">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
