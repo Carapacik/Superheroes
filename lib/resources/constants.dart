@@ -1,3 +1,3 @@
-String _superheroToken = '104517988595968';
+String _superheroToken = '';
 
 String get token => _superheroToken;

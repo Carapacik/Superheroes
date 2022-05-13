@@ -1,5 +1,5 @@
 name: superheroes
-description: Seach on superheroapi.com
+description: Search for superheroes on superheroapi.com
 publish_to: 'none'
 version: 1.0.6+7
 environment:
