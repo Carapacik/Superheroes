@@ -4,4 +4,4 @@
 
 Search for heroes on <a href='https://superheroapi.com/'>superheroapi.com</a> and add to local favorites
 
-Add your **Token** in `.env` file
+Add your **Token** in `lib/resources/constants.dart` file

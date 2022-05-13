@@ -1,32 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:superheroes/exception/api_exception.dart';
 import 'package:superheroes/favorite_superheroes_storage.dart';
 import 'package:superheroes/model/alignment_info.dart';
 import 'package:superheroes/model/superhero.dart';
+import 'package:superheroes/resources/constants.dart';
 
 class MainBloc {
-  static const minSymbols = 3;
-  final BehaviorSubject<MainPageState> stateSubject = BehaviorSubject();
-  final BehaviorSubject<List<SuperheroInfo>> searchedSuperheroSubject =
-      BehaviorSubject<List<SuperheroInfo>>();
-  final currentTextSubject = BehaviorSubject<String>.seeded("");
-
-  StreamSubscription? textSubscription;
-  StreamSubscription? searchSubscription;
-  StreamSubscription? removeFromFavoriteSubscription;
-
-  Stream<List<SuperheroInfo>> observeSearchedSuperheroes() =>
-      searchedSuperheroSubject;
-
-  Stream<MainPageState> observeMainPageState() => stateSubject;
-
-  http.Client? client;
-
   MainBloc({this.client}) {
     textSubscription =
         Rx.combineLatest2<String, List<Superhero>, MainPageStateInfo>(
@@ -54,6 +38,23 @@ class MainBloc {
     });
   }
 
+  static const minSymbols = 3;
+  final BehaviorSubject<MainPageState> stateSubject = BehaviorSubject();
+  final BehaviorSubject<List<SuperheroInfo>> searchedSuperheroSubject =
+      BehaviorSubject<List<SuperheroInfo>>();
+  final currentTextSubject = BehaviorSubject<String>.seeded('');
+
+  StreamSubscription? textSubscription;
+  StreamSubscription? searchSubscription;
+  StreamSubscription? removeFromFavoriteSubscription;
+
+  Stream<List<SuperheroInfo>> observeSearchedSuperheroes() =>
+      searchedSuperheroSubject;
+
+  Stream<MainPageState> observeMainPageState() => stateSubject;
+
+  http.Client? client;
+
   void searchForSuperheroes(final String text) {
     stateSubject.add(MainPageState.loading);
     searchSubscription = search(text).asStream().listen(
@@ -65,7 +66,7 @@ class MainBloc {
           stateSubject.add(MainPageState.searchResults);
         }
       },
-      onError: (error, stackTrace) {
+      onError: (Object error) {
         stateSubject.add(MainPageState.loadingError);
       },
     );
@@ -76,10 +77,7 @@ class MainBloc {
     removeFromFavoriteSubscription = FavoriteSuperheroesStorage.getInstance()
         .removeFromFavorites(id)
         .asStream()
-        .listen(
-          (event) {},
-          onError: (error, stackTrace) {},
-        );
+        .listen((event) {});
   }
 
   void retry() {
@@ -88,37 +86,32 @@ class MainBloc {
   }
 
   Future<List<SuperheroInfo>> search(final String text) async {
-    final token = dotenv.env["SUPERHERO_TOKEN"];
     final response = await (client ??= http.Client()).get(
-      Uri.parse("https://superheroapi.com/api/$token/search/$text"),
+      Uri.parse('https://superheroapi.com/api/$token/search/$text'),
     );
     if (response.statusCode >= 500 && response.statusCode <= 599) {
-      throw ApiException("Server error happened");
+      throw const ApiException('Server error happened');
     }
     if (response.statusCode >= 400 && response.statusCode <= 499) {
-      throw ApiException("Client error happened");
+      throw const ApiException('Client error happened');
     }
     final decoded = json.decode(response.body) as Map<String, dynamic>;
     if (decoded['response'] == 'success') {
-      final List<dynamic> results = decoded['results'] as List<dynamic>;
-      final List<Superhero> superheroes = results
-          .map(
-            (rawSuperhero) =>
-                Superhero.fromJson(rawSuperhero as Map<String, dynamic>),
-          )
+      final results = decoded['results'] as List<dynamic>;
+      final superheroes = results
+          .map((dynamic rawhero) =>
+              Superhero.fromJson(rawhero as Map<String, dynamic>))
           .toList();
-      final List<SuperheroInfo> found = superheroes
-          .map((superhero) => SuperheroInfo.fromSuperhero(superhero))
-          .toList();
+      final found = superheroes.map(SuperheroInfo.fromSuperhero).toList();
       return found;
     } else if (decoded['response'] == 'error') {
       if (decoded['error'] == 'character with given name not found') {
         return [];
       }
-      throw ApiException("Client error happened");
+      throw const ApiException('Client error happened');
     }
 
-    throw Exception("Unknown error happened");
+    throw Exception('Unknown error happened');
   }
 
   void nextState() {
@@ -130,18 +123,14 @@ class MainBloc {
   }
 
   void updateText(final String? text) {
-    currentTextSubject.add(text ?? "");
+    currentTextSubject.add(text ?? '');
   }
 
-  Stream<List<SuperheroInfo>> observeFavoriteSuperheroes() {
-    return FavoriteSuperheroesStorage.getInstance()
-        .observeFavoriteSuperheroes()
-        .map(
-          (superheroes) => superheroes
-              .map((superhero) => SuperheroInfo.fromSuperhero(superhero))
-              .toList(),
-        );
-  }
+  Stream<List<SuperheroInfo>> observeFavoriteSuperheroes() =>
+      FavoriteSuperheroesStorage.getInstance().observeFavoriteSuperheroes().map(
+            (superheroes) =>
+                superheroes.map(SuperheroInfo.fromSuperhero).toList(),
+          );
 
   void dispose() {
     stateSubject.close();
@@ -166,13 +155,8 @@ enum MainPageState {
   favorites,
 }
 
+@immutable
 class SuperheroInfo {
-  final String id;
-  final String name;
-  final String realName;
-  final String imageUrl;
-  final AlignmentInfo? alignmentInfo;
-
   const SuperheroInfo({
     required this.id,
     required this.name,
@@ -181,20 +165,24 @@ class SuperheroInfo {
     this.alignmentInfo,
   });
 
-  factory SuperheroInfo.fromSuperhero(final Superhero superhero) {
-    return SuperheroInfo(
-      id: superhero.id,
-      name: superhero.name,
-      realName: superhero.biography.fullName,
-      imageUrl: superhero.image.url,
-      alignmentInfo: superhero.biography.alignmentInfo,
-    );
-  }
+  factory SuperheroInfo.fromSuperhero(final Superhero superhero) =>
+      SuperheroInfo(
+        id: superhero.id,
+        name: superhero.name,
+        realName: superhero.biography.fullName,
+        imageUrl: superhero.image.url,
+        alignmentInfo: superhero.biography.alignmentInfo,
+      );
+
+  final String id;
+  final String name;
+  final String realName;
+  final String imageUrl;
+  final AlignmentInfo? alignmentInfo;
 
   @override
-  String toString() {
-    return 'SuperheroInfo{id: $id, name: $name, realName: $realName, imageUrl: $imageUrl}';
-  }
+  String toString() =>
+      'SuperheroInfo{id: $id, name: $name, realName: $realName, imageUrl: $imageUrl}';
 
   @override
   bool operator ==(Object other) =>
@@ -211,16 +199,16 @@ class SuperheroInfo {
       id.hashCode ^ name.hashCode ^ realName.hashCode ^ imageUrl.hashCode;
 }
 
+@immutable
 class MainPageStateInfo {
+  const MainPageStateInfo(this.searchText, {required this.haveFavorites});
+
   final String searchText;
   final bool haveFavorites;
 
-  const MainPageStateInfo(this.searchText, {required this.haveFavorites});
-
   @override
-  String toString() {
-    return 'MainPageStateInfo{searchText: $searchText, haveFavorites: $haveFavorites}';
-  }
+  String toString() =>
+      'MainPageStateInfo{searchText: $searchText, haveFavorites: $haveFavorites}';
 
   @override
   bool operator ==(Object other) =>

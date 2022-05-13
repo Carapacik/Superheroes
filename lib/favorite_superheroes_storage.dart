@@ -5,16 +5,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:superheroes/model/superhero.dart';
 
 class FavoriteSuperheroesStorage {
-  static const _key = "favorite_superheroes";
-
-  final updater = PublishSubject<Null>();
-
-  static FavoriteSuperheroesStorage? _instance;
+  FavoriteSuperheroesStorage._internal();
 
   factory FavoriteSuperheroesStorage.getInstance() =>
       _instance ??= FavoriteSuperheroesStorage._internal();
+  static const _key = 'favorite_superheroes';
 
-  FavoriteSuperheroesStorage._internal();
+  // ignore: prefer_void_to_null
+  final updater = PublishSubject<Null>();
+
+  static FavoriteSuperheroesStorage? _instance;
 
   Future<bool> addToFavorites(final Superhero superhero) async {
     final rawSuperheroes = await _getRawSuperheroes();
@@ -43,8 +43,11 @@ class FavoriteSuperheroesStorage {
   Future<List<Superhero>> _getSuperheroes() async {
     final rawSuperheroes = await _getRawSuperheroes();
     return rawSuperheroes
-        .map((rawSuperhero) => Superhero.fromJson(
-            json.decode(rawSuperhero) as Map<String, dynamic>))
+        .map(
+          (rawSuperhero) => Superhero.fromJson(
+            json.decode(rawSuperhero) as Map<String, dynamic>,
+          ),
+        )
         .toList();
   }
 
@@ -67,15 +70,15 @@ class FavoriteSuperheroesStorage {
 
   Stream<List<Superhero>> observeFavoriteSuperheroes() async* {
     yield await _getSuperheroes();
+    // ignore: no_leading_underscores_for_local_identifiers
     await for (final _ in updater) {
       yield await _getSuperheroes();
     }
   }
 
-  Stream<bool> observeIsFavorite(final String id) {
-    return observeFavoriteSuperheroes()
-        .map((superheroes) => superheroes.any((element) => element.id == id));
-  }
+  Stream<bool> observeIsFavorite(final String id) =>
+      observeFavoriteSuperheroes()
+          .map((superheroes) => superheroes.any((element) => element.id == id));
 
   Future<bool> updateIfInFavorites(final Superhero newSuperhero) async {
     final superheroes = await _getSuperheroes();
