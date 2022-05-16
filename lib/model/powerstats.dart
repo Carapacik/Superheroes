@@ -1,17 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'powerstats.g.dart';
 
 @JsonSerializable()
+@immutable
 class Powerstats {
-  final String intelligence;
-  final String strength;
-  final String speed;
-  final String durability;
-  final String power;
-  final String combat;
-
-  Powerstats({
+  const Powerstats({
     required this.intelligence,
     required this.strength,
     required this.speed,
@@ -20,13 +15,22 @@ class Powerstats {
     required this.combat,
   });
 
+  factory Powerstats.fromJson(Map<String, dynamic> json) =>
+      _$PowerstatsFromJson(json);
+  final String intelligence;
+  final String strength;
+  final String speed;
+  final String durability;
+  final String power;
+  final String combat;
+
   bool isNotNull() =>
-      intelligence != "null" &&
-      strength != "null" &&
-      speed != "null" &&
-      durability != "null" &&
-      power != "null" &&
-      combat != "null";
+      intelligence != 'null' &&
+      strength != 'null' &&
+      speed != 'null' &&
+      durability != 'null' &&
+      power != 'null' &&
+      combat != 'null';
 
   double get intelligencePercent => convertStringToPercent(intelligence);
 
@@ -42,12 +46,11 @@ class Powerstats {
 
   double convertStringToPercent(final String value) {
     final intValue = int.tryParse(intelligence);
-    if (intValue == null) return 0;
+    if (intValue == null) {
+      return 0;
+    }
     return intValue / 100;
   }
-
-  factory Powerstats.fromJson(Map<String, dynamic> json) =>
-      _$PowerstatsFromJson(json);
 
   Map<String, dynamic> toJson() => _$PowerstatsToJson(this);
 
@@ -73,7 +76,6 @@ class Powerstats {
       combat.hashCode;
 
   @override
-  String toString() {
-    return 'Powerstats{intelligence: $intelligence, strength: $strength, speed: $speed, durability: $durability, power: $power, combat: $combat}';
-  }
+  String toString() =>
+      'Powerstats{intelligence: $intelligence, strength: $strength, speed: $speed, durability: $durability, power: $power, combat: $combat}';
 }

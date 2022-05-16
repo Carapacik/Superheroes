@@ -1,15 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'server_image.g.dart';
 
 @JsonSerializable()
+@immutable
 class ServerImage {
-  final String url;
-
-  ServerImage(this.url);
+  const ServerImage(this.url);
 
   factory ServerImage.fromJson(Map<String, dynamic> json) =>
       _$ServerImageFromJson(json);
+
+  final String url;
 
   Map<String, dynamic> toJson() => _$ServerImageToJson(this);
 
@@ -24,7 +26,5 @@ class ServerImage {
   int get hashCode => url.hashCode;
 
   @override
-  String toString() {
-    return 'ServerImage{url: $url}';
-  }
+  String toString() => 'ServerImage{url: $url}';
 }

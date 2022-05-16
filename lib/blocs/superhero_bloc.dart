@@ -1,14 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:superheroes/exception/api_exception.dart';
 import 'package:superheroes/favorite_superheroes_storage.dart';
 import 'package:superheroes/model/superhero.dart';
+import 'package:superheroes/resources/constants.dart';
 
 class SuperheroBloc {
+  SuperheroBloc({
+    required this.id,
+    this.client,
+  }) {
+    getFromFavorites();
+  }
+
   http.Client? client;
   final String id;
 
@@ -18,10 +25,6 @@ class SuperheroBloc {
   StreamSubscription? requestSubscription;
   StreamSubscription? addToFavoriteSubscription;
   StreamSubscription? removeFromFavoriteSubscription;
-
-  SuperheroBloc({this.client, required this.id}) {
-    getFromFavorites();
-  }
 
   void getFromFavorites() {
     getFromFavoritesSubscription?.cancel();
@@ -38,7 +41,7 @@ class SuperheroBloc {
         }
         requestSuperhero(isInFavorite: superhero != null);
       },
-      onError: (error, stackTrace) {
+      onError: (Object error) {
         superheroPageStateSubject.add(SuperheroPageState.error);
       },
     );
@@ -54,11 +57,8 @@ class SuperheroBloc {
         .addToFavorites(superhero)
         .asStream()
         .listen(
-      (event) {
-        superheroPageStateSubject.add(SuperheroPageState.loaded);
-      },
-      onError: (error, stackTrace) {},
-    );
+          (event) => superheroPageStateSubject.add(SuperheroPageState.loaded),
+        );
   }
 
   void removeFromFavorites() {
@@ -68,7 +68,6 @@ class SuperheroBloc {
         .asStream()
         .listen(
           (event) {},
-          onError: (error, stackTrace) {},
         );
   }
 
@@ -79,7 +78,7 @@ class SuperheroBloc {
         superheroSubject.add(superhero);
         superheroPageStateSubject.add(SuperheroPageState.loaded);
       },
-      onError: (error, stackTrace) {
+      onError: (Object error) {
         if (!isInFavorite) {
           superheroPageStateSubject.add(SuperheroPageState.error);
         }
@@ -93,15 +92,14 @@ class SuperheroBloc {
   }
 
   Future<Superhero> request() async {
-    final token = dotenv.env["SUPERHERO_TOKEN"];
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     final response = await (client ??= http.Client())
-        .get(Uri.parse("https://superheroapi.com/api/$token/$id"));
+        .get(Uri.parse('https://superheroapi.com/api/$token/$id'));
     if (response.statusCode >= 500 && response.statusCode <= 599) {
-      throw ApiException("Server error happened");
+      throw const ApiException('Server error happened');
     }
     if (response.statusCode >= 400 && response.statusCode <= 499) {
-      throw ApiException("Client error happened");
+      throw const ApiException('Client error happened');
     }
     final decoded = json.decode(response.body) as Map<String, dynamic>;
     if (decoded['response'] == 'success') {
@@ -110,9 +108,9 @@ class SuperheroBloc {
           .updateIfInFavorites(superhero);
       return superhero;
     } else if (decoded['response'] == 'error') {
-      throw ApiException("Client error happened");
+      throw const ApiException('Client error happened');
     }
-    throw Exception("Unknown error happened");
+    throw Exception('Unknown error happened');
   }
 
   Stream<bool> observeIsFavorite() =>

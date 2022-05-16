@@ -1,23 +1,23 @@
 import 'dart:ui';
 
-import 'package:superheroes/resources/superheroes_colors.dart';
+import 'package:superheroes/resources/app_colors.dart';
 
-class AlignmentInfo {
-  final String name;
-  final Color color;
+enum AlignmentInfo {
+  bad._('bad', AppColors.red),
+  neutral._('neutral', AppColors.grey),
+  good._('good', AppColors.green);
 
   const AlignmentInfo._(this.name, this.color);
 
-  static const bad = AlignmentInfo._("bad", SuperheroesColors.red);
-  static const neutral = AlignmentInfo._("neutral", SuperheroesColors.grey);
-  static const good = AlignmentInfo._("good", SuperheroesColors.green);
+  final String name;
+  final Color color;
 
   static AlignmentInfo? fromAlignment(final String alignment) {
-    if (alignment == "bad") {
+    if (alignment == 'bad') {
       return bad;
-    } else if (alignment == "good") {
+    } else if (alignment == 'good') {
       return good;
-    } else if (alignment == "neutral") {
+    } else if (alignment == 'neutral') {
       return neutral;
     }
     return null;

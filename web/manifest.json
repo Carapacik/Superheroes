@@ -1,11 +1,11 @@
 {
-    "name": "Superheroes",
-    "short_name": "Superheroes",
+    "name": "superheroes",
+    "short_name": "superheroes",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Work with open api",
+    "description": "Search for superheroes on superheroapi.com",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
