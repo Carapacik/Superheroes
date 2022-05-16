@@ -99,8 +99,10 @@ class MainBloc {
     if (decoded['response'] == 'success') {
       final results = decoded['results'] as List<dynamic>;
       final superheroes = results
-          .map((dynamic rawhero) =>
-              Superhero.fromJson(rawhero as Map<String, dynamic>))
+          .map(
+            (dynamic rawhero) =>
+                Superhero.fromJson(rawhero as Map<String, dynamic>),
+          )
           .toList();
       final found = superheroes.map(SuperheroInfo.fromSuperhero).toList();
       return found;

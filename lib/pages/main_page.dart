@@ -33,9 +33,10 @@ class _MainPageState extends State<MainPage> {
         child: Scaffold(
           backgroundColor: AppColors.background,
           body: SafeArea(
-            child: Center(
+            child: Align(
+              alignment: Alignment.topCenter,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 900),
+                constraints: const BoxConstraints(maxWidth: 800),
                 child: MainPageContent(),
               ),
             ),

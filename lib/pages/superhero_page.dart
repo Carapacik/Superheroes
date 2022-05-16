@@ -43,7 +43,7 @@ class _SuperheroPageState extends State<SuperheroPage> {
           backgroundColor: AppColors.background,
           body: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 900),
+              constraints: const BoxConstraints(maxWidth: 800),
               child: const SuperheroContentPage(),
             ),
           ),
