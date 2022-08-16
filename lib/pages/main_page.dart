@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/pages/superhero_page.dart';
-import 'package:superheroes/resources/app_colors.dart';
-import 'package:superheroes/resources/app_images.dart';
+import 'package:superheroes/resources/colors.dart';
+import 'package:superheroes/resources/images.dart';
 import 'package:superheroes/widgets/info_with_button.dart';
 import 'package:superheroes/widgets/superhero_card.dart';
 
@@ -28,6 +28,12 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => Provider.value(
         value: bloc,
         child: Scaffold(
@@ -43,12 +49,6 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
       );
-
-  @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
-  }
 }
 
 class MainPageContent extends StatelessWidget {
@@ -59,9 +59,7 @@ class MainPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
         children: [
-          MainPageStateWidget(
-            searchFiledFocusNode: searchFiledFocusNode,
-          ),
+          MainPageStateWidget(searchFiledFocusNode: searchFiledFocusNode),
           Padding(
             padding: const EdgeInsets.only(left: 15, right: 16, top: 12),
             child: SearchWidget(searchFiledFocusNode: searchFiledFocusNode),
@@ -80,12 +78,13 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  final TextEditingController controller = TextEditingController();
+  late final TextEditingController controller;
   bool haveSearchedText = false;
 
   @override
   void initState() {
     super.initState();
+    controller = TextEditingController();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       final bloc = Provider.of<MainBloc>(context, listen: false);
       controller.addListener(() {
@@ -101,16 +100,19 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => TextField(
         focusNode: widget.searchFiledFocusNode,
         controller: controller,
         cursorColor: Colors.white,
         textInputAction: TextInputAction.search,
         textCapitalization: TextCapitalization.words,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-        ),
+        style: const TextStyle(color: Colors.white, fontSize: 20),
         decoration: InputDecoration(
           filled: true,
           fillColor: AppColors.indigo75,
@@ -124,7 +126,8 @@ class _SearchWidgetState extends State<SearchWidget> {
             onTap: controller.clear,
             child: const Icon(
               Icons.clear,
-              color: Colors.white,
+              color: Colors.white54,
+              size: 24,
             ),
           ),
           border: OutlineInputBorder(
@@ -148,10 +151,7 @@ class _SearchWidgetState extends State<SearchWidget> {
 }
 
 class MainPageStateWidget extends StatelessWidget {
-  const MainPageStateWidget({
-    required this.searchFiledFocusNode,
-    super.key,
-  });
+  const MainPageStateWidget({required this.searchFiledFocusNode, super.key});
 
   final FocusNode searchFiledFocusNode;
 

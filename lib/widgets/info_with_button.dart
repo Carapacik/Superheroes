@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:superheroes/resources/app_colors.dart';
+import 'package:superheroes/resources/colors.dart';
 import 'package:superheroes/widgets/action_button.dart';
 
 class InfoWithButton extends StatelessWidget {

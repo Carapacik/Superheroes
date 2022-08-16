@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:superheroes/exception/api_exception.dart';
-import 'package:superheroes/favorite_superheroes_storage.dart';
 import 'package:superheroes/model/superhero.dart';
-import 'package:superheroes/resources/constants.dart';
+import 'package:superheroes/utils/constants.dart';
+import 'package:superheroes/utils/favorite_superheroes_storage.dart';
 
 class SuperheroBloc {
   SuperheroBloc({
@@ -93,8 +93,9 @@ class SuperheroBloc {
 
   Future<Superhero> request() async {
     await Future<void>.delayed(const Duration(milliseconds: 500));
-    final response = await (client ??= http.Client())
-        .get(Uri.parse('https://superheroapi.com/api/$token/$id'));
+    final response = await (client ??= http.Client()).get(
+      Uri.parse('$baseUrl/id/$id.json'),
+    );
     if (response.statusCode >= 500 && response.statusCode <= 599) {
       throw const ApiException('Server error happened');
     }

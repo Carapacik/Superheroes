@@ -8,6 +8,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         theme: ThemeData(
+          useMaterial3: true,
           textTheme: GoogleFonts.openSansTextTheme(
             Theme.of(context).textTheme,
           ),

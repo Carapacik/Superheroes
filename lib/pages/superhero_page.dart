@@ -8,8 +8,8 @@ import 'package:superheroes/blocs/superhero_bloc.dart';
 import 'package:superheroes/model/biography.dart';
 import 'package:superheroes/model/powerstats.dart';
 import 'package:superheroes/model/superhero.dart';
-import 'package:superheroes/resources/app_colors.dart';
-import 'package:superheroes/resources/app_images.dart';
+import 'package:superheroes/resources/colors.dart';
+import 'package:superheroes/resources/images.dart';
 import 'package:superheroes/widgets/alignment_widget.dart';
 import 'package:superheroes/widgets/info_with_button.dart';
 
@@ -37,6 +37,12 @@ class _SuperheroPageState extends State<SuperheroPage> {
   }
 
   @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => Provider.value(
         value: bloc,
         child: Scaffold(
@@ -49,12 +55,6 @@ class _SuperheroPageState extends State<SuperheroPage> {
           ),
         ),
       );
-
-  @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
-  }
 }
 
 class SuperheroContentPage extends StatelessWidget {
