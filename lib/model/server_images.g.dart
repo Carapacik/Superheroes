@@ -1,16 +1,16 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'server_image.dart';
+part of 'server_images.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ServerImage _$ServerImageFromJson(Map<String, dynamic> json) => ServerImage(
-      json['url'] as String,
+ServerImages _$ServerImagesFromJson(Map<String, dynamic> json) => ServerImages(
+      json['lg'] as String,
     );
 
-Map<String, dynamic> _$ServerImageToJson(ServerImage instance) =>
+Map<String, dynamic> _$ServerImagesToJson(ServerImages instance) =>
     <String, dynamic>{
-      'url': instance.url,
+      'lg': instance.lg,
     };

@@ -9,12 +9,13 @@ class FavoriteSuperheroesStorage {
 
   factory FavoriteSuperheroesStorage.getInstance() =>
       _instance ??= FavoriteSuperheroesStorage._internal();
+
+  static FavoriteSuperheroesStorage? _instance;
+
   static const _key = 'favorite_superheroes';
 
   // ignore: prefer_void_to_null
   final updater = PublishSubject<Null>();
-
-  static FavoriteSuperheroesStorage? _instance;
 
   Future<bool> addToFavorites(final Superhero superhero) async {
     final rawSuperheroes = await _getRawSuperheroes();

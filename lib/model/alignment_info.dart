@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:superheroes/resources/app_colors.dart';
+import 'package:superheroes/resources/colors.dart';
 
 enum AlignmentInfo {
   bad._('bad', AppColors.red),

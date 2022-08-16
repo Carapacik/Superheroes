@@ -17,20 +17,13 @@ class Powerstats {
 
   factory Powerstats.fromJson(Map<String, dynamic> json) =>
       _$PowerstatsFromJson(json);
-  final String intelligence;
-  final String strength;
-  final String speed;
-  final String durability;
-  final String power;
-  final String combat;
 
-  bool isNotNull() =>
-      intelligence != 'null' &&
-      strength != 'null' &&
-      speed != 'null' &&
-      durability != 'null' &&
-      power != 'null' &&
-      combat != 'null';
+  final int intelligence;
+  final int strength;
+  final int speed;
+  final int durability;
+  final int power;
+  final int combat;
 
   double get intelligencePercent => convertStringToPercent(intelligence);
 
@@ -44,12 +37,11 @@ class Powerstats {
 
   double get combatPercent => convertStringToPercent(combat);
 
-  double convertStringToPercent(final String value) {
-    final intValue = int.tryParse(intelligence);
-    if (intValue == null) {
+  double convertStringToPercent(final int value) {
+    if (value < 0) {
       return 0;
     }
-    return intValue / 100;
+    return value / 100;
   }
 
   Map<String, dynamic> toJson() => _$PowerstatsToJson(this);
@@ -74,8 +66,4 @@ class Powerstats {
       durability.hashCode ^
       power.hashCode ^
       combat.hashCode;
-
-  @override
-  String toString() =>
-      'Powerstats{intelligence: $intelligence, strength: $strength, speed: $speed, durability: $durability, power: $power, combat: $combat}';
 }

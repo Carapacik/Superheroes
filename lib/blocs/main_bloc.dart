@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:superheroes/exception/api_exception.dart';
-import 'package:superheroes/favorite_superheroes_storage.dart';
 import 'package:superheroes/model/alignment_info.dart';
 import 'package:superheroes/model/superhero.dart';
-import 'package:superheroes/resources/constants.dart';
+import 'package:superheroes/utils/constants.dart';
+import 'package:superheroes/utils/favorite_superheroes_storage.dart';
 
 class MainBloc {
   MainBloc({this.client}) {
@@ -16,7 +16,7 @@ class MainBloc {
         Rx.combineLatest2<String, List<Superhero>, MainPageStateInfo>(
       currentTextSubject
           .distinct()
-          .debounceTime(const Duration(milliseconds: 500)),
+          .debounceTime(const Duration(milliseconds: 300)),
       FavoriteSuperheroesStorage.getInstance().observeFavoriteSuperheroes(),
       (searchText, haveFavorites) => MainPageStateInfo(
         searchText,
@@ -38,10 +38,14 @@ class MainBloc {
     });
   }
 
+  http.Client? client;
   static const minSymbols = 3;
+
   final BehaviorSubject<MainPageState> stateSubject = BehaviorSubject();
+
   final BehaviorSubject<List<SuperheroInfo>> searchedSuperheroSubject =
       BehaviorSubject<List<SuperheroInfo>>();
+
   final currentTextSubject = BehaviorSubject<String>.seeded('');
 
   StreamSubscription? textSubscription;
@@ -52,8 +56,6 @@ class MainBloc {
       searchedSuperheroSubject;
 
   Stream<MainPageState> observeMainPageState() => stateSubject;
-
-  http.Client? client;
 
   void searchForSuperheroes(final String text) {
     stateSubject.add(MainPageState.loading);
@@ -87,7 +89,7 @@ class MainBloc {
 
   Future<List<SuperheroInfo>> search(final String text) async {
     final response = await (client ??= http.Client()).get(
-      Uri.parse('https://superheroapi.com/api/$token/search/$text'),
+      Uri.parse('$baseUrl/all.json'),
     );
     if (response.statusCode >= 500 && response.statusCode <= 599) {
       throw const ApiException('Server error happened');
@@ -95,25 +97,17 @@ class MainBloc {
     if (response.statusCode >= 400 && response.statusCode <= 499) {
       throw const ApiException('Client error happened');
     }
-    final decoded = json.decode(response.body) as Map<String, dynamic>;
-    if (decoded['response'] == 'success') {
-      final results = decoded['results'] as List<dynamic>;
-      final superheroes = results
-          .map(
-            (dynamic rawhero) =>
-                Superhero.fromJson(rawhero as Map<String, dynamic>),
-          )
-          .toList();
-      final found = superheroes.map(SuperheroInfo.fromSuperhero).toList();
-      return found;
-    } else if (decoded['response'] == 'error') {
-      if (decoded['error'] == 'character with given name not found') {
-        return [];
-      }
-      throw const ApiException('Client error happened');
-    }
-
-    throw Exception('Unknown error happened');
+    final results = json.decode(response.body) as List;
+    final superheroes = results
+        .map(
+          (dynamic rawhero) =>
+              Superhero.fromJson(rawhero as Map<String, dynamic>),
+        )
+        .where(
+          (element) => element.name.toLowerCase().contains(text.toLowerCase()),
+        );
+    final found = superheroes.map(SuperheroInfo.fromSuperhero).toList();
+    return found;
   }
 
   void nextState() {
@@ -169,10 +163,10 @@ class SuperheroInfo {
 
   factory SuperheroInfo.fromSuperhero(final Superhero superhero) =>
       SuperheroInfo(
-        id: superhero.id,
+        id: superhero.id.toString(),
         name: superhero.name,
         realName: superhero.biography.fullName,
-        imageUrl: superhero.image.url,
+        imageUrl: superhero.images.lg,
         alignmentInfo: superhero.biography.alignmentInfo,
       );
 
