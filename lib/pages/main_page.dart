@@ -289,10 +289,9 @@ class SuperheroesList extends StatelessWidget {
             itemBuilder: (context, index) {
               if (index == 0) {
                 return ListTitleWidget(title: title);
-              } else {
-                final item = superheroes[index - 1];
-                return ListTile(superhero: item, ableToSwipe: ableToSwipe);
               }
+              final item = superheroes[index - 1];
+              return ListTile(superhero: item, ableToSwipe: ableToSwipe);
             },
             separatorBuilder: (context, index) => const SizedBox(height: 8),
           );

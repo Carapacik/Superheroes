@@ -1,7 +1,7 @@
 name: superheroes
 description: Search for superheroes on superheroapi.com
 publish_to: 'none'
-version: 1.1.0+9
+version: 1.1.0+10
 environment:
   sdk: ">=2.17.0 <3.0.0"
   flutter: ">=3.0.0"
@@ -33,7 +33,7 @@ flutter:
 
 flutter_native_splash:
   color: '#10141E'
-  image: 'assets/ic_foreground.png'
+  image: 'assets/ic_logo_transparent.png'
   android: true
   ios: true
   web: true

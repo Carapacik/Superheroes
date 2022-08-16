@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:superheroes/model/biography.dart';
 import 'package:superheroes/model/powerstats.dart';
-import 'package:superheroes/model/server_image.dart';
+import 'package:superheroes/model/server_images.dart';
 
 part 'superhero.g.dart';
 
@@ -13,17 +13,17 @@ class Superhero {
     required this.id,
     required this.name,
     required this.biography,
-    required this.image,
+    required this.images,
     required this.powerstats,
   });
 
   factory Superhero.fromJson(Map<String, dynamic> json) =>
       _$SuperheroFromJson(json);
 
-  final String id;
+  final int id;
   final String name;
   final Biography biography;
-  final ServerImage image;
+  final ServerImages images;
   final Powerstats powerstats;
 
   Map<String, dynamic> toJson() => _$SuperheroToJson(this);
@@ -36,7 +36,7 @@ class Superhero {
           id == other.id &&
           name == other.name &&
           biography == other.biography &&
-          image == other.image &&
+          images == other.images &&
           powerstats == other.powerstats;
 
   @override
@@ -44,10 +44,6 @@ class Superhero {
       id.hashCode ^
       name.hashCode ^
       biography.hashCode ^
-      image.hashCode ^
+      images.hashCode ^
       powerstats.hashCode;
-
-  @override
-  String toString() =>
-      'Superhero{id: $id, name: $name, biography: $biography, image: $image, powerstats: $powerstats}';
 }

@@ -13,6 +13,7 @@ class Biography {
     required this.alignment,
     required this.fullName,
     required this.placeOfBirth,
+    this.publisher,
   });
 
   factory Biography.fromJson(Map<String, dynamic> json) =>
@@ -22,6 +23,7 @@ class Biography {
   final String alignment;
   final List<String> aliases;
   final String placeOfBirth;
+  final String? publisher;
 
   AlignmentInfo? get alignmentInfo => AlignmentInfo.fromAlignment(alignment);
 
@@ -35,16 +37,14 @@ class Biography {
           fullName == other.fullName &&
           alignment == other.alignment &&
           const ListEquality<String>().equals(aliases, other.aliases) &&
-          placeOfBirth == other.placeOfBirth;
+          placeOfBirth == other.placeOfBirth &&
+          publisher == other.publisher;
 
   @override
   int get hashCode =>
       fullName.hashCode ^
       alignment.hashCode ^
       aliases.hashCode ^
-      placeOfBirth.hashCode;
-
-  @override
-  String toString() =>
-      'Biography{fullName: $fullName, alignment: $alignment, aliases: $aliases, placeOfBirth: $placeOfBirth}';
+      placeOfBirth.hashCode ^
+      publisher.hashCode;
 }

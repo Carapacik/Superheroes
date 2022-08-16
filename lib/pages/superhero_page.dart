@@ -153,8 +153,8 @@ class SuperheroLoadedWidget extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 30),
-                  if (superhero.powerstats.isNotNull())
-                    PowerStatsWidget(powerStats: superhero.powerstats),
+                  PowerStatsWidget(powerStats: superhero.powerstats),
+                  const SizedBox(height: 30),
                   BiographyWidget(biography: superhero.biography),
                   const SizedBox(height: 30),
                 ],
@@ -191,7 +191,7 @@ class SuperheroAppBar extends StatelessWidget {
           ),
           centerTitle: true,
           background: CachedNetworkImage(
-            imageUrl: superhero.image.url,
+            imageUrl: superhero.images.lg,
             fit: BoxFit.cover,
             placeholder: (context, url) =>
                 const ColoredBox(color: AppColors.indigo),
@@ -320,7 +320,6 @@ class PowerStatsWidget extends StatelessWidget {
               const SizedBox(width: 16),
             ],
           ),
-          const SizedBox(height: 36),
         ],
       );
 }

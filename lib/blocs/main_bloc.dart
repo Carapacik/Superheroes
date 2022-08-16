@@ -97,26 +97,17 @@ class MainBloc {
     if (response.statusCode >= 400 && response.statusCode <= 499) {
       throw const ApiException('Client error happened');
     }
-    final dynamic decoded = json.decode(response.body);
-    print(decoded);
-    // if (decoded['response'] == 'success') {
-    //   final results = decoded['results'] as List<dynamic>;
-    //   final superheroes = results
-    //       .map(
-    //         (dynamic rawhero) =>
-    //             Superhero.fromJson(rawhero as Map<String, dynamic>),
-    //       )
-    //       .toList();
-    //   final found = superheroes.map(SuperheroInfo.fromSuperhero).toList();
-    //   return found;
-    // } else if (decoded['response'] == 'error') {
-    //   if (decoded['error'] == 'character with given name not found') {
-    //     return [];
-    //   }
-    //   throw const ApiException('Client error happened');
-    // }
-
-    throw Exception('Unknown error happened');
+    final results = json.decode(response.body) as List;
+    final superheroes = results
+        .map(
+          (dynamic rawhero) =>
+              Superhero.fromJson(rawhero as Map<String, dynamic>),
+        )
+        .where(
+          (element) => element.name.toLowerCase().contains(text.toLowerCase()),
+        );
+    final found = superheroes.map(SuperheroInfo.fromSuperhero).toList();
+    return found;
   }
 
   void nextState() {
@@ -172,10 +163,10 @@ class SuperheroInfo {
 
   factory SuperheroInfo.fromSuperhero(final Superhero superhero) =>
       SuperheroInfo(
-        id: superhero.id,
+        id: superhero.id.toString(),
         name: superhero.name,
         realName: superhero.biography.fullName,
-        imageUrl: superhero.image.url,
+        imageUrl: superhero.images.lg,
         alignmentInfo: superhero.biography.alignmentInfo,
       );
 
