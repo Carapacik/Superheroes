@@ -23,7 +23,7 @@ class FavoriteSuperheroesStorage {
     return _setRawSuperheroes(rawSuperheroes);
   }
 
-  Future<bool> removeFromFavorites(final String id) async {
+  Future<bool> removeFromFavorites(final int id) async {
     final superheroes = await _getSuperheroes();
     superheroes.removeWhere((superhero) => superhero.id == id);
     return _setSuperheroes(superheroes);
@@ -59,7 +59,7 @@ class FavoriteSuperheroesStorage {
     return _setRawSuperheroes(rawSuperheroes);
   }
 
-  Future<Superhero?> getSuperhero(final String id) async {
+  Future<Superhero?> getSuperhero(final int id) async {
     final superheroes = await _getSuperheroes();
     for (final superhero in superheroes) {
       if (superhero.id == id) {
@@ -77,9 +77,8 @@ class FavoriteSuperheroesStorage {
     }
   }
 
-  Stream<bool> observeIsFavorite(final String id) =>
-      observeFavoriteSuperheroes()
-          .map((superheroes) => superheroes.any((element) => element.id == id));
+  Stream<bool> observeIsFavorite(final int id) => observeFavoriteSuperheroes()
+      .map((superheroes) => superheroes.any((element) => element.id == id));
 
   Future<bool> updateIfInFavorites(final Superhero newSuperhero) async {
     final superheroes = await _getSuperheroes();

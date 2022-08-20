@@ -21,7 +21,7 @@ class SuperheroPage extends StatefulWidget {
   });
 
   final http.Client? client;
-  final String id;
+  final int id;
 
   @override
   _SuperheroPageState createState() => _SuperheroPageState();
@@ -195,6 +195,7 @@ class SuperheroAppBar extends StatelessWidget {
             fit: BoxFit.cover,
             placeholder: (context, url) =>
                 const ColoredBox(color: AppColors.indigo),
+            // ignore: avoid_annotating_with_dynamic
             errorWidget: (context, url, dynamic error) => Container(
               alignment: Alignment.center,
               color: AppColors.indigo,
@@ -475,6 +476,13 @@ class BiographyWidget extends StatelessWidget {
                     fieldName: 'Place of birth',
                     fieldValue: biography.placeOfBirth,
                   ),
+                  if (biography.publisher != null) ...[
+                    const SizedBox(height: 20),
+                    BiographyField(
+                      fieldName: 'Publisher',
+                      fieldValue: biography.publisher!,
+                    ),
+                  ]
                 ],
               ),
             ),

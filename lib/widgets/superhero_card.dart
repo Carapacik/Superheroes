@@ -99,6 +99,7 @@ class _AvatarWidget extends StatelessWidget {
               value: progress.progress,
             ),
           ),
+          // ignore: avoid_annotating_with_dynamic
           errorWidget: (context, url, dynamic error) => Center(
             child: Image.asset(
               AppImages.unknown,

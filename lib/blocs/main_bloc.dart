@@ -10,6 +10,7 @@ import 'package:superheroes/model/superhero.dart';
 import 'package:superheroes/utils/constants.dart';
 import 'package:superheroes/utils/favorite_superheroes_storage.dart';
 
+// ignore_for_file: avoid_annotating_with_dynamic, avoid_types_on_closure_parameters
 class MainBloc {
   MainBloc({this.client}) {
     textSubscription =
@@ -74,7 +75,7 @@ class MainBloc {
     );
   }
 
-  void removeFromFavorites(final String id) {
+  void removeFromFavorites(final int id) {
     removeFromFavoriteSubscription?.cancel();
     removeFromFavoriteSubscription = FavoriteSuperheroesStorage.getInstance()
         .removeFromFavorites(id)
@@ -100,8 +101,8 @@ class MainBloc {
     final results = json.decode(response.body) as List;
     final superheroes = results
         .map(
-          (dynamic rawhero) =>
-              Superhero.fromJson(rawhero as Map<String, dynamic>),
+          (dynamic rawHero) =>
+              Superhero.fromJson(rawHero as Map<String, dynamic>),
         )
         .where(
           (element) => element.name.toLowerCase().contains(text.toLowerCase()),
@@ -163,22 +164,18 @@ class SuperheroInfo {
 
   factory SuperheroInfo.fromSuperhero(final Superhero superhero) =>
       SuperheroInfo(
-        id: superhero.id.toString(),
+        id: superhero.id,
         name: superhero.name,
         realName: superhero.biography.fullName,
         imageUrl: superhero.images.lg,
         alignmentInfo: superhero.biography.alignmentInfo,
       );
 
-  final String id;
+  final int id;
   final String name;
   final String realName;
   final String imageUrl;
   final AlignmentInfo? alignmentInfo;
-
-  @override
-  String toString() =>
-      'SuperheroInfo{id: $id, name: $name, realName: $realName, imageUrl: $imageUrl}';
 
   @override
   bool operator ==(Object other) =>

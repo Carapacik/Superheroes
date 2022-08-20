@@ -8,6 +8,7 @@ import 'package:superheroes/model/superhero.dart';
 import 'package:superheroes/utils/constants.dart';
 import 'package:superheroes/utils/favorite_superheroes_storage.dart';
 
+// ignore_for_file: avoid_types_on_closure_parameters
 class SuperheroBloc {
   SuperheroBloc({
     required this.id,
@@ -17,7 +18,7 @@ class SuperheroBloc {
   }
 
   http.Client? client;
-  final String id;
+  final int id;
 
   final superheroPageStateSubject = BehaviorSubject<SuperheroPageState>();
   final superheroSubject = BehaviorSubject<Superhero>();
@@ -92,7 +93,6 @@ class SuperheroBloc {
   }
 
   Future<Superhero> request() async {
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     final response = await (client ??= http.Client()).get(
       Uri.parse('$baseUrl/id/$id.json'),
     );
@@ -103,15 +103,11 @@ class SuperheroBloc {
       throw const ApiException('Client error happened');
     }
     final decoded = json.decode(response.body) as Map<String, dynamic>;
-    if (decoded['response'] == 'success') {
-      final superhero = Superhero.fromJson(decoded);
-      await FavoriteSuperheroesStorage.getInstance()
-          .updateIfInFavorites(superhero);
-      return superhero;
-    } else if (decoded['response'] == 'error') {
-      throw const ApiException('Client error happened');
-    }
-    throw Exception('Unknown error happened');
+
+    final superhero = Superhero.fromJson(decoded);
+    await FavoriteSuperheroesStorage.getInstance()
+        .updateIfInFavorites(superhero);
+    return superhero;
   }
 
   Stream<bool> observeIsFavorite() =>
