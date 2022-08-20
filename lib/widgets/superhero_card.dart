@@ -30,9 +30,9 @@ class SuperheroCard extends StatelessWidget {
               _AvatarWidget(superheroInfo: superheroInfo),
               const SizedBox(width: 12),
               NameAndRealNameWidget(superheroInfo: superheroInfo),
-              if (superheroInfo.alignmentInfo != null)
+              if (superheroInfo.alignmentEnum != null)
                 AlignmentWidget(
-                  alignmentInfo: superheroInfo.alignmentInfo!,
+                  alignmentEnum: superheroInfo.alignmentEnum!,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),

@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:superheroes/model/alignment_info.dart';
+import 'package:superheroes/model/alignment.dart';
 
 part 'biography.g.dart';
 
@@ -10,7 +10,7 @@ part 'biography.g.dart';
 class Biography {
   const Biography({
     required this.aliases,
-    required this.alignment,
+    required this.alignmentEnum,
     required this.fullName,
     required this.placeOfBirth,
     this.publisher,
@@ -20,12 +20,10 @@ class Biography {
       _$BiographyFromJson(json);
 
   final String fullName;
-  final String alignment;
+  final AlignmentEnum? alignmentEnum;
   final List<String> aliases;
   final String placeOfBirth;
   final String? publisher;
-
-  AlignmentInfo? get alignmentInfo => AlignmentInfo.fromAlignment(alignment);
 
   Map<String, dynamic> toJson() => _$BiographyToJson(this);
 
@@ -35,7 +33,7 @@ class Biography {
       other is Biography &&
           runtimeType == other.runtimeType &&
           fullName == other.fullName &&
-          alignment == other.alignment &&
+          alignmentEnum == other.alignmentEnum &&
           const ListEquality<String>().equals(aliases, other.aliases) &&
           placeOfBirth == other.placeOfBirth &&
           publisher == other.publisher;
@@ -43,7 +41,7 @@ class Biography {
   @override
   int get hashCode =>
       fullName.hashCode ^
-      alignment.hashCode ^
+      alignmentEnum.hashCode ^
       aliases.hashCode ^
       placeOfBirth.hashCode ^
       publisher.hashCode;

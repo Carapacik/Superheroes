@@ -174,6 +174,7 @@ class SuperheroAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SliverAppBar(
+        foregroundColor: Colors.white,
         stretch: true,
         pinned: true,
         floating: true,
@@ -486,11 +487,11 @@ class BiographyWidget extends StatelessWidget {
                 ],
               ),
             ),
-            if (biography.alignmentInfo != null)
+            if (biography.alignmentEnum != null)
               Align(
                 alignment: Alignment.topRight,
                 child: AlignmentWidget(
-                  alignmentInfo: biography.alignmentInfo!,
+                  alignmentEnum: biography.alignmentEnum!,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(16),
                     bottomRight: Radius.circular(16),

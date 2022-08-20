@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:superheroes/exception/api_exception.dart';
-import 'package:superheroes/model/alignment_info.dart';
+import 'package:superheroes/model/alignment.dart';
 import 'package:superheroes/model/superhero.dart';
 import 'package:superheroes/utils/constants.dart';
 import 'package:superheroes/utils/favorite_superheroes_storage.dart';
@@ -159,7 +159,7 @@ class SuperheroInfo {
     required this.name,
     required this.realName,
     required this.imageUrl,
-    this.alignmentInfo,
+    this.alignmentEnum,
   });
 
   factory SuperheroInfo.fromSuperhero(final Superhero superhero) =>
@@ -168,14 +168,14 @@ class SuperheroInfo {
         name: superhero.name,
         realName: superhero.biography.fullName,
         imageUrl: superhero.images.lg,
-        alignmentInfo: superhero.biography.alignmentInfo,
+        alignmentEnum: superhero.biography.alignmentEnum,
       );
 
   final int id;
   final String name;
   final String realName;
   final String imageUrl;
-  final AlignmentInfo? alignmentInfo;
+  final AlignmentEnum? alignmentEnum;
 
   @override
   bool operator ==(Object other) =>

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:superheroes/model/alignment_info.dart';
+import 'package:superheroes/model/alignment.dart';
 
 class AlignmentWidget extends StatelessWidget {
   const AlignmentWidget({
-    required this.alignmentInfo,
+    required this.alignmentEnum,
     required this.borderRadius,
     super.key,
   });
 
-  final AlignmentInfo alignmentInfo;
+  final AlignmentEnum alignmentEnum;
   final BorderRadius borderRadius;
 
   @override
@@ -20,11 +20,11 @@ class AlignmentWidget extends StatelessWidget {
           height: 24,
           width: 70,
           decoration: BoxDecoration(
-            color: alignmentInfo.color,
+            color: alignmentEnum.color,
             borderRadius: borderRadius,
           ),
           child: Text(
-            alignmentInfo.name.toUpperCase(),
+            alignmentEnum.name.toUpperCase(),
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w700,
