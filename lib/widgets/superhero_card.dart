@@ -6,11 +6,7 @@ import 'package:superheroes/resources/images.dart';
 import 'package:superheroes/widgets/alignment_widget.dart';
 
 class SuperheroCard extends StatelessWidget {
-  const SuperheroCard({
-    required this.superheroInfo,
-    required this.onTap,
-    super.key,
-  });
+  const SuperheroCard({required this.superheroInfo, required this.onTap, super.key});
 
   final SuperheroInfo superheroInfo;
   final VoidCallback onTap;

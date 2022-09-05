@@ -10,20 +10,17 @@ import 'package:superheroes/model/superhero.dart';
 import 'package:superheroes/utils/constants.dart';
 import 'package:superheroes/utils/favorite_superheroes_storage.dart';
 
-// ignore_for_file: avoid_annotating_with_dynamic, avoid_types_on_closure_parameters
+// ignore_for_file: discarded_futures, unawaited_futures
 class MainBloc {
   MainBloc({this.client}) {
-    textSubscription =
-        Rx.combineLatest2<String, List<Superhero>, MainPageStateInfo>(
-      currentTextSubject
-          .distinct()
-          .debounceTime(const Duration(milliseconds: 300)),
+    textSubscription = Rx.combineLatest2<String, List<Superhero>, MainPageStateInfo>(
+      currentTextSubject.distinct().debounceTime(const Duration(milliseconds: 300)),
       FavoriteSuperheroesStorage.getInstance().observeFavoriteSuperheroes(),
       (searchText, haveFavorites) => MainPageStateInfo(
         searchText,
         haveFavorites: haveFavorites.isNotEmpty,
       ),
-    ).listen((value) {
+    ).listen((value) async {
       searchSubscription?.cancel();
       if (value.searchText.isEmpty) {
         if (value.haveFavorites) {
@@ -49,12 +46,11 @@ class MainBloc {
 
   final currentTextSubject = BehaviorSubject<String>.seeded('');
 
-  StreamSubscription? textSubscription;
-  StreamSubscription? searchSubscription;
-  StreamSubscription? removeFromFavoriteSubscription;
+  StreamSubscription<MainPageStateInfo>? textSubscription;
+  StreamSubscription<List<SuperheroInfo>>? searchSubscription;
+  StreamSubscription<bool>? removeFromFavoriteSubscription;
 
-  Stream<List<SuperheroInfo>> observeSearchedSuperheroes() =>
-      searchedSuperheroSubject;
+  Stream<List<SuperheroInfo>> observeSearchedSuperheroes() => searchedSuperheroSubject;
 
   Stream<MainPageState> observeMainPageState() => stateSubject;
 
@@ -69,6 +65,7 @@ class MainBloc {
           stateSubject.add(MainPageState.searchResults);
         }
       },
+      // ignore:  avoid_types_on_closure_parameters
       onError: (Object error) {
         stateSubject.add(MainPageState.loadingError);
       },
@@ -101,8 +98,8 @@ class MainBloc {
     final results = json.decode(response.body) as List;
     final superheroes = results
         .map(
-          (dynamic rawHero) =>
-              Superhero.fromJson(rawHero as Map<String, dynamic>),
+          // ignore: avoid_annotating_with_dynamic
+          (dynamic rawHero) => Superhero.fromJson(rawHero as Map<String, dynamic>),
         )
         .where(
           (element) => element.name.toLowerCase().contains(text.toLowerCase()),
@@ -113,9 +110,8 @@ class MainBloc {
 
   void nextState() {
     final currentState = stateSubject.value;
-    final nextState = MainPageState.values[
-        (MainPageState.values.indexOf(currentState) + 1) %
-            MainPageState.values.length];
+    final nextState = MainPageState
+        .values[(MainPageState.values.indexOf(currentState) + 1) % MainPageState.values.length];
     stateSubject.add(nextState);
   }
 
@@ -125,8 +121,7 @@ class MainBloc {
 
   Stream<List<SuperheroInfo>> observeFavoriteSuperheroes() =>
       FavoriteSuperheroesStorage.getInstance().observeFavoriteSuperheroes().map(
-            (superheroes) =>
-                superheroes.map(SuperheroInfo.fromSuperhero).toList(),
+            (superheroes) => superheroes.map(SuperheroInfo.fromSuperhero).toList(),
           );
 
   void dispose() {
@@ -162,8 +157,7 @@ class SuperheroInfo {
     this.alignmentEnum,
   });
 
-  factory SuperheroInfo.fromSuperhero(final Superhero superhero) =>
-      SuperheroInfo(
+  factory SuperheroInfo.fromSuperhero(final Superhero superhero) => SuperheroInfo(
         id: superhero.id,
         name: superhero.name,
         realName: superhero.biography.fullName,
@@ -188,8 +182,7 @@ class SuperheroInfo {
           imageUrl == other.imageUrl;
 
   @override
-  int get hashCode =>
-      id.hashCode ^ name.hashCode ^ realName.hashCode ^ imageUrl.hashCode;
+  int get hashCode => id.hashCode ^ name.hashCode ^ realName.hashCode ^ imageUrl.hashCode;
 }
 
 @immutable
@@ -200,8 +193,7 @@ class MainPageStateInfo {
   final bool haveFavorites;
 
   @override
-  String toString() =>
-      'MainPageStateInfo{searchText: $searchText, haveFavorites: $haveFavorites}';
+  String toString() => 'MainPageStateInfo{searchText: $searchText, haveFavorites: $haveFavorites}';
 
   @override
   bool operator ==(Object other) =>

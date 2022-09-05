@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:superheroes/model/alignment.dart';
 
 class AlignmentWidget extends StatelessWidget {
-  const AlignmentWidget({
-    required this.alignmentEnum,
-    required this.borderRadius,
-    super.key,
-  });
+  const AlignmentWidget({required this.alignmentEnum, required this.borderRadius, super.key});
 
   final AlignmentEnum alignmentEnum;
   final BorderRadius borderRadius;

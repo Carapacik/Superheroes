@@ -16,8 +16,7 @@ class Biography {
     this.publisher,
   });
 
-  factory Biography.fromJson(Map<String, dynamic> json) =>
-      _$BiographyFromJson(json);
+  factory Biography.fromJson(Map<String, dynamic> json) => _$BiographyFromJson(json);
 
   final String fullName;
   final AlignmentEnum? alignmentEnum;

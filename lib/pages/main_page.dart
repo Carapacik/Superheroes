@@ -314,8 +314,8 @@ class ListTile extends StatelessWidget {
     final bloc = Provider.of<MainBloc>(context, listen: false);
     final card = SuperheroCard(
       superheroInfo: superhero,
-      onTap: () {
-        Navigator.of(context).push<void>(
+      onTap: () async {
+        await Navigator.of(context).push<void>(
           MaterialPageRoute(
             builder: (context) => SuperheroPage(id: superhero.id),
           ),
@@ -370,8 +370,7 @@ class ListTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 90, bottom: 12),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 90, bottom: 12),
         child: Text(
           title,
           style: const TextStyle(

@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:superheroes/resources/colors.dart';
 
 class ActionButton extends StatelessWidget {
-  const ActionButton({
-    required this.text,
-    this.onTap,
-    super.key,
-  });
+  const ActionButton({required this.text, this.onTap, super.key});
 
   final String text;
   final VoidCallback? onTap;

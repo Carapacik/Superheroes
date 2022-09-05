@@ -194,8 +194,7 @@ class SuperheroAppBar extends StatelessWidget {
           background: CachedNetworkImage(
             imageUrl: superhero.images.lg,
             fit: BoxFit.cover,
-            placeholder: (context, url) =>
-                const ColoredBox(color: AppColors.indigo),
+            placeholder: (context, url) => const ColoredBox(color: AppColors.indigo),
             // ignore: avoid_annotating_with_dynamic
             errorWidget: (context, url, dynamic error) => Container(
               alignment: Alignment.center,
@@ -223,8 +222,7 @@ class FavoriteButton extends StatelessWidget {
       builder: (context, snapshot) {
         final favorite = !snapshot.hasData || snapshot.requireData;
         return GestureDetector(
-          onTap: () =>
-              favorite ? bloc.removeFromFavorites() : bloc.addToFavorite(),
+          onTap: () => favorite ? bloc.removeFromFavorites() : bloc.addToFavorite(),
           child: Container(
             height: 52,
             width: 52,

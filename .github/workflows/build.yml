@@ -10,14 +10,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-         distribution: 'zulu'
-         java-version: '11'
-      - uses: subosito/flutter-action@v2.6.1
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
       - name: Install dependencies
@@ -26,5 +21,3 @@ jobs:
         run: flutter format --output=none --set-exit-if-changed .
       - name: Analyze project
         run: flutter analyze
-      - name: Build project for web
-        run: flutter build web
