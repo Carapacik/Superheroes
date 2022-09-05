@@ -8,12 +8,9 @@ import 'package:superheroes/model/superhero.dart';
 import 'package:superheroes/utils/constants.dart';
 import 'package:superheroes/utils/favorite_superheroes_storage.dart';
 
-// ignore_for_file: avoid_types_on_closure_parameters
+// ignore_for_file: avoid_types_on_closure_parameters, discarded_futures, unawaited_futures
 class SuperheroBloc {
-  SuperheroBloc({
-    required this.id,
-    this.client,
-  }) {
+  SuperheroBloc({required this.id, this.client}) {
     getFromFavorites();
   }
 
@@ -22,17 +19,15 @@ class SuperheroBloc {
 
   final superheroPageStateSubject = BehaviorSubject<SuperheroPageState>();
   final superheroSubject = BehaviorSubject<Superhero>();
-  StreamSubscription? getFromFavoritesSubscription;
-  StreamSubscription? requestSubscription;
-  StreamSubscription? addToFavoriteSubscription;
-  StreamSubscription? removeFromFavoriteSubscription;
+  StreamSubscription<Superhero?>? getFromFavoritesSubscription;
+  StreamSubscription<Superhero>? requestSubscription;
+  StreamSubscription<bool>? addToFavoriteSubscription;
+  StreamSubscription<bool>? removeFromFavoriteSubscription;
 
   void getFromFavorites() {
     getFromFavoritesSubscription?.cancel();
-    getFromFavoritesSubscription = FavoriteSuperheroesStorage.getInstance()
-        .getSuperhero(id)
-        .asStream()
-        .listen(
+    getFromFavoritesSubscription =
+        FavoriteSuperheroesStorage.getInstance().getSuperhero(id).asStream().listen(
       (superhero) {
         if (superhero != null) {
           superheroSubject.add(superhero);
@@ -54,22 +49,18 @@ class SuperheroBloc {
       return;
     }
     addToFavoriteSubscription?.cancel();
-    addToFavoriteSubscription = FavoriteSuperheroesStorage.getInstance()
-        .addToFavorites(superhero)
-        .asStream()
-        .listen(
-          (event) => superheroPageStateSubject.add(SuperheroPageState.loaded),
-        );
+    addToFavoriteSubscription =
+        FavoriteSuperheroesStorage.getInstance().addToFavorites(superhero).asStream().listen(
+              (event) => superheroPageStateSubject.add(SuperheroPageState.loaded),
+            );
   }
 
   void removeFromFavorites() {
     removeFromFavoriteSubscription?.cancel();
-    removeFromFavoriteSubscription = FavoriteSuperheroesStorage.getInstance()
-        .removeFromFavorites(id)
-        .asStream()
-        .listen(
-          (event) {},
-        );
+    removeFromFavoriteSubscription =
+        FavoriteSuperheroesStorage.getInstance().removeFromFavorites(id).asStream().listen(
+              (event) {},
+            );
   }
 
   void requestSuperhero({required final bool isInFavorite}) {
@@ -105,8 +96,7 @@ class SuperheroBloc {
     final decoded = json.decode(response.body) as Map<String, dynamic>;
 
     final superhero = Superhero.fromJson(decoded);
-    await FavoriteSuperheroesStorage.getInstance()
-        .updateIfInFavorites(superhero);
+    await FavoriteSuperheroesStorage.getInstance().updateIfInFavorites(superhero);
     return superhero;
   }
 
@@ -115,17 +105,18 @@ class SuperheroBloc {
 
   Stream<Superhero> observeSuperhero() => superheroSubject.distinct();
 
-  Stream<SuperheroPageState> observeSuperheroPageState() =>
-      superheroPageStateSubject.distinct();
+  Stream<SuperheroPageState> observeSuperheroPageState() => superheroPageStateSubject.distinct();
 
   void dispose() {
-    client?.close();
     getFromFavoritesSubscription?.cancel();
     requestSubscription?.cancel();
     addToFavoriteSubscription?.cancel();
     removeFromFavoriteSubscription?.cancel();
+
     superheroSubject.close();
     superheroPageStateSubject.close();
+
+    client?.close();
   }
 }
 

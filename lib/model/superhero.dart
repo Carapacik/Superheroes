@@ -17,8 +17,7 @@ class Superhero {
     required this.powerstats,
   });
 
-  factory Superhero.fromJson(Map<String, dynamic> json) =>
-      _$SuperheroFromJson(json);
+  factory Superhero.fromJson(Map<String, dynamic> json) => _$SuperheroFromJson(json);
 
   final int id;
   final String name;
@@ -41,9 +40,5 @@ class Superhero {
 
   @override
   int get hashCode =>
-      id.hashCode ^
-      name.hashCode ^
-      biography.hashCode ^
-      images.hashCode ^
-      powerstats.hashCode;
+      id.hashCode ^ name.hashCode ^ biography.hashCode ^ images.hashCode ^ powerstats.hashCode;
 }

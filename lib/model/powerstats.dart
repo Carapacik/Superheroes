@@ -15,8 +15,7 @@ class Powerstats {
     required this.combat,
   });
 
-  factory Powerstats.fromJson(Map<String, dynamic> json) =>
-      _$PowerstatsFromJson(json);
+  factory Powerstats.fromJson(Map<String, dynamic> json) => _$PowerstatsFromJson(json);
 
   final int intelligence;
   final int strength;

@@ -4,4 +4,4 @@
 
 <img src="./.github/readme/1.png" width="40%" /> <img src="./.github/readme/2.png" width="40%" />
 
-Based on [akabab api](https://github.com/akabab/superhero-api)
+Based on [akabab superheroes api](https://github.com/akabab/superhero-api)

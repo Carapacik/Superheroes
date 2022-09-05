@@ -53,9 +53,7 @@ class FavoriteSuperheroesStorage {
   }
 
   Future<bool> _setSuperheroes(final List<Superhero> superheroes) async {
-    final rawSuperheroes = superheroes
-        .map((superhero) => json.encode(superhero.toJson()))
-        .toList();
+    final rawSuperheroes = superheroes.map((superhero) => json.encode(superhero.toJson())).toList();
     return _setRawSuperheroes(rawSuperheroes);
   }
 
@@ -82,8 +80,7 @@ class FavoriteSuperheroesStorage {
 
   Future<bool> updateIfInFavorites(final Superhero newSuperhero) async {
     final superheroes = await _getSuperheroes();
-    final index =
-        superheroes.indexWhere((superhero) => superhero.id == newSuperhero.id);
+    final index = superheroes.indexWhere((superhero) => superhero.id == newSuperhero.id);
     if (index == -1) {
       return false;
     }
