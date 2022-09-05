@@ -7,10 +7,8 @@ part of 'biography.dart';
 // **************************************************************************
 
 Biography _$BiographyFromJson(Map<String, dynamic> json) => Biography(
-      aliases:
-          (json['aliases'] as List<dynamic>).map((e) => e as String).toList(),
-      alignmentEnum:
-          $enumDecodeNullable(_$AlignmentEnumEnumMap, json['alignmentEnum']),
+      aliases: (json['aliases'] as List<dynamic>).map((e) => e as String).toList(),
+      alignmentEnum: $enumDecodeNullable(_$AlignmentEnumEnumMap, json['alignmentEnum']),
       fullName: json['fullName'] as String,
       placeOfBirth: json['placeOfBirth'] as String,
       publisher: json['publisher'] as String?,

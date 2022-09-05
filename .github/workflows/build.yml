@@ -18,6 +18,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Verify formatting
-        run: flutter format --output=none --set-exit-if-changed .
+        run: flutter format -o none -l 100 --set-exit-if-changed .
       - name: Analyze project
         run: flutter analyze

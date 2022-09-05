@@ -11,8 +11,7 @@ Superhero _$SuperheroFromJson(Map<String, dynamic> json) => Superhero(
       name: json['name'] as String,
       biography: Biography.fromJson(json['biography'] as Map<String, dynamic>),
       images: ServerImages.fromJson(json['images'] as Map<String, dynamic>),
-      powerstats:
-          Powerstats.fromJson(json['powerstats'] as Map<String, dynamic>),
+      powerstats: Powerstats.fromJson(json['powerstats'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SuperheroToJson(Superhero instance) => <String, dynamic>{

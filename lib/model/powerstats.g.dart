@@ -15,8 +15,7 @@ Powerstats _$PowerstatsFromJson(Map<String, dynamic> json) => Powerstats(
       combat: json['combat'] as int,
     );
 
-Map<String, dynamic> _$PowerstatsToJson(Powerstats instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$PowerstatsToJson(Powerstats instance) => <String, dynamic>{
       'intelligence': instance.intelligence,
       'strength': instance.strength,
       'speed': instance.speed,
