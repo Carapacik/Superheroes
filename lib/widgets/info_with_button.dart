@@ -46,7 +46,7 @@ class InfoWithButton extends StatelessWidget {
                   height: imageHeight,
                   width: imageWidth,
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -68,7 +68,7 @@ class InfoWithButton extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 30),
-          ActionButton(text: buttonText, onTap: onTap)
+          ActionButton(text: buttonText, onTap: onTap),
         ],
       );
 }

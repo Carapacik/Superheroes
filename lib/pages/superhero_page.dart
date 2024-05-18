@@ -481,7 +481,7 @@ class BiographyWidget extends StatelessWidget {
                       fieldName: 'Publisher',
                       fieldValue: biography.publisher!,
                     ),
-                  ]
+                  ],
                 ],
               ),
             ),
@@ -495,7 +495,7 @@ class BiographyWidget extends StatelessWidget {
                     bottomRight: Radius.circular(16),
                   ),
                 ),
-              )
+              ),
           ],
         ),
       );
